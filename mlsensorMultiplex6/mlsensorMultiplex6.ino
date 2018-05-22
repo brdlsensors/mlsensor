@@ -39,7 +39,7 @@ ISR(TIMER1_COMPA_vect)          // timer compare interrupt service routine
 //  digitalWrite(ledPin, digitalRead(ledPin) ^ 1);   // toggle LED pin
   if (0 == counter)
   {
-    // 0000
+    // 0000 - 5V
     digitalWrite(s0, LOW);
     digitalWrite(s1, LOW);
     digitalWrite(s2, LOW);
@@ -48,7 +48,7 @@ ISR(TIMER1_COMPA_vect)          // timer compare interrupt service routine
   }
   else if (1 == counter)
   {
-    // 0001
+    // 0001 - sensor 1
     digitalWrite(s0, HIGH);
     digitalWrite(s1, LOW);
     digitalWrite(s2, LOW);
@@ -57,7 +57,7 @@ ISR(TIMER1_COMPA_vect)          // timer compare interrupt service routine
   }
   else if (2 == counter)
   {
-    // 0010
+    // 0010 - 0V
     digitalWrite(s0, LOW);
     digitalWrite(s1, HIGH);
     digitalWrite(s2, LOW);
@@ -66,8 +66,8 @@ ISR(TIMER1_COMPA_vect)          // timer compare interrupt service routine
   }
   else if (3 == counter)
   {
-    // 0010
-    digitalWrite(s0, LOW);
+    // 0011 - sensor 2
+    digitalWrite(s0, HIGH);
     digitalWrite(s1, HIGH);
     digitalWrite(s2, LOW);
     digitalWrite(s3, LOW);
@@ -75,19 +75,19 @@ ISR(TIMER1_COMPA_vect)          // timer compare interrupt service routine
   }
   else if (4 == counter)
   {
-    // 0010
+    // 0100 - 0V
     digitalWrite(s0, LOW);
-    digitalWrite(s1, HIGH);
-    digitalWrite(s2, LOW);
+    digitalWrite(s1, LOW);
+    digitalWrite(s2, HIGH);
     digitalWrite(s3, LOW);
     counter = 5;
   }
   else if (5 == counter)
   {
-    // 0010
-    digitalWrite(s0, LOW);
-    digitalWrite(s1, HIGH);
-    digitalWrite(s2, LOW);
+    // 0101 - sensor 3
+    digitalWrite(s0, HIGH);
+    digitalWrite(s1, LOW);
+    digitalWrite(s2, HIGH);
     digitalWrite(s3, LOW);
     counter = 0;
   }
