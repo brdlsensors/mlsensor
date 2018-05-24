@@ -1,9 +1,9 @@
-clc
-clear all
-close all
+% clc
+% clear all
+% close all
 
 numSensors = 3;
-load('t1_2.mat');
+%load('t1_4contacts.mat');
 
 %%
 
@@ -56,3 +56,41 @@ for i=1:numSensors
     plateau_sigFilt(:,i) = medfilt1(plateau_sigs(:,i), windowSize);
 end
 plot(plateau_sigFilt, 'DisplayName', 'plateau_sigFilt');
+
+out=plateau_sigFilt;
+%%
+inp=inp2;
+freq=10;%hz
+inptime=1;%sec%based on arduino
+
+inps=length(inp);
+%inp=cell2mat(inp);
+inp=repmat(inp,inptime*freq,1);
+inp=reshape(inp,1,[]);
+inp=inp';
+%
+asd=length(t);
+t=[0;t];
+
+out=out(1:asd,:);
+out=[out(1,:);out];
+
+pos=pos(:,1:asd,:);
+pos=[pos(:,1,:) pos];
+pos=double(pos);
+
+for i=1:3
+    [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline');
+    
+    for j=1:3
+        for k=1:2
+            [posp(j,:,k),yt]=resample(squeeze(pos(j,:,k)),t(:,1),freq,'spline');
+        end
+    end
+end
+
+
+% for i=1:length(sig)
+%     plot(sig(i,:))
+%     hold on
+% end

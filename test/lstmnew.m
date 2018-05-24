@@ -1,7 +1,7 @@
-siz=230000;
+siz=160000;
 sfreq=5;
 lag=10;
-rx=1:3;
+rx=1:2;
 
 % Downsampling the actual frequency by sfreq.
 inpf=inp(1:sfreq:end);
@@ -9,9 +9,11 @@ outpf=outp(1:sfreq:end,:);
 pospf=posp(:,1:sfreq:end,:);
 siz=siz/sfreq;
 
-outpf(:,2:3)=rand(47200,2);
+%outpf(:,2:3)=rand(47200,2);
 
 x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
+
+%x=[outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 
 %x=[inpf(3+lag:siz+2,1)]';
 %x=[outpf(3+lag:siz+2,rx)]';
@@ -64,7 +66,7 @@ YTest = t(:,divi+1:end);
 %YTest = (YTest - mu2) / sig2;
 
 
-numHiddenUnits = 250;
+numHiddenUnits = 300;
 
 layers = [ ...
     sequenceInputLayer(inputSize)
