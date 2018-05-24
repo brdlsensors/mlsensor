@@ -1,6 +1,10 @@
 clear; close all; clc
+%% VARIABLES
+numSensors = 3;
+freq=10;%hz
+inptime=1;%sec%based on arduino
+%%
 rng(233566)
-
 s = daq.createSession('digilent')
 
 ch = addAnalogInputChannel(s,'AD1', 1, 'Voltage')
@@ -99,14 +103,45 @@ for i = 1:timeStepEnd
         [singleReading(i,kk), triggerTime(i,kk)] = inputSingleScan(s);
     end
     
-    data_opti = natnetclient.getFrame;
-    for j = 1:2
-        %fprintf( 'Name:"%s"  ', model.RigidBody( 1 ).Name )
-        pos (1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
-        pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
-        pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
+      t(i,1) = toc;
+    sig(i,:) = abs(pwc_cluster(singleReading(i,:),[],0,0.1,1));
+    [v, ind] = max(sig(i,:));
+    sig(i,:) = circshift(sig(i,:), n+1-ind);
+
+    % How to identify array elements that occur more than once
+    sig_filt = sig(i,:);
+    idx = find(hist(sig_filt,unique(sig_filt))>4); % current challenge is that histogram sorts manually
+    uniqVals = unique(sig_filt);
+    plateau = uniqVals(idx);
+
+    [counts, centers] = hist(sig_filt, unique(sig_filt));
+
+    %figure;
+    %plot(sig_filt)
+
+    ordering = zeros(size(plateau));
+    for k=1:length(plateau)
+        vals = find(sig_filt == plateau(k));
+        ordering(k) = vals(1); % take the first value that represents the plateau.
     end
-    t(i,1) = toc;
+
+    [ordering_sorted, ordering_order] = sort(ordering);
+    plateau_sorted = plateau(ordering_order);
+    
+    if(length(plateau_sorted) < 4)
+       plateau_sorted = [plateau_sorted, plateau_sigs(i-1, end)]; 
+    end
+    if(length(plateau_sorted) < 5)
+        plateau_sorted = [plateau_sorted, plateau_sorted(4)];
+    end
+    
+    out(i,:) = [plateau_sorted(2), plateau_sorted(4), plateau_sorted(5)];
+    
+    inp=inp2(1,ceil(t(i,1)));
+   inplstm=[inp,out(1:i,rx),outpf(1:i-1,rx)]';
+    
+  [net,YPred_o ]= predictAndUpdateState(net,x);
+  
     
     
 end

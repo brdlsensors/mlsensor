@@ -50,8 +50,9 @@ end
 
 % x=normalize(x,2);
 % t=normalize(t,2);
-
+tic
 [net,YPred_o ]= predictAndUpdateState(net,x);
+toc
 %[net,YPred] = predictAndUpdateState(net,XTrain(:,end));
 for z=1:numResponses
     
