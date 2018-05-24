@@ -51,7 +51,7 @@ s.Rate = 300e3;
 %% LCR Meter Reader
 
 rng(233566)
-addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
+addpath('C:\Users\thoma\Desktop\mlsensor\test\NatNetSDK\Samples\Matlab')
 timeStepEnd = 30000;
 
 
@@ -77,7 +77,7 @@ out = zeros(timeStepEnd,4);
 
 dev = serial('COM3','BaudRate',250000);
 fopen(dev)
-pause(1)
+pause(5)
 
 inp2=35*rand(1,1000);
 inp2=round(inp2);
@@ -87,6 +87,7 @@ for i=1:1000
     hop(1,i)=fscanf(dev,'%i');
 end
 
+pause(5)
 fprintf(dev,'%i',1)
 
 i=1

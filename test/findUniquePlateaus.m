@@ -47,7 +47,7 @@ for i = 1:length(singleReading)
 end
 
 
-%plot(plateau_sigs,'DisplayName','plateau_sigs')
+plot(plateau_sigs,'DisplayName','plateau_sigs')
 
 
 windowSize = 5;
@@ -55,7 +55,7 @@ plateau_sigFilt = zeros(size(plateau_sigs));
 for i=1:numSensors
     plateau_sigFilt(:,i) = medfilt1(plateau_sigs(:,i), windowSize);
 end
-plot(plateau_sigFilt, 'DisplayName', 'plateau_sigFilt');
+%plot(plateau_sigFilt, 'DisplayName', 'plateau_sigFilt');
 
 out=plateau_sigFilt;
 %%

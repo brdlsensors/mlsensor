@@ -118,18 +118,6 @@ void setup() {
 
 void loop() {
 
-  do {
-    if (Serial.available()) {
-
-      setpt1[ini] = float(Serial.parseInt());
-      setpt1[ini]=setpt1[ini]/10;
-      Serial.println(ini);
-
-      ini++;
-    }
-
-  }
-  while (ini < numPoints);
 
   //Reset motors
   //reset motor 1
@@ -167,9 +155,24 @@ void loop() {
 
   }
 
+  do {
+    if (Serial.available()) {
+
+      setpt1[ini] = float(Serial.parseInt());
+      setpt1[ini]=setpt1[ini]/10;
+      Serial.println(ini);
+
+      ini++;
+    }
+
+  }
+  while (ini < numPoints);
+
+  
 
 
-  if (Serial.available() > 0 && ini==numPoints)
+
+  if (Serial.available() )
   { // read the incoming byte:
     run_stop = Serial.read();
     run_stop=49;
