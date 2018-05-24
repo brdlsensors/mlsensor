@@ -1,7 +1,7 @@
-siz=44000;
-sfreq=1;
+siz=42000;
+sfreq=5;
 lag=10;
-rx=1:3;
+rx=1;
 
 % Downsampling the actual frequency by sfreq.
 inpf=inp(1:sfreq:end);
@@ -28,7 +28,7 @@ inputSize = size(x,1);
 numResponses =size(t,1);
 
 %t=t+60*randn(1,length(t));
-divi=floor(0.99*length(x));
+divi=floor(0.8*length(x));
 numTimeStepsTrain=divi;
 
 %numTimeStepsTrain = floor(0.9*numel(data));
