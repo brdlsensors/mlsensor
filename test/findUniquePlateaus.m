@@ -53,7 +53,7 @@ plot(plateau_sigs,'DisplayName','plateau_sigs')
 windowSize = 5;
 plateau_sigFilt = zeros(size(plateau_sigs));
 for i=1:numSensors
-    plateau_sigFilt(:,i) = medfilt1(plateau_sigs(:,i), windowSize);
+    plateau_sigFilt(:,i) = medfilt1(plateau_sigs(:,i), windowSize); % BSTODO: improve this line to not apply the median filter to the entire signal, but rather only the points that are outliers.
 end
 %plot(plateau_sigFilt, 'DisplayName', 'plateau_sigFilt');
 
