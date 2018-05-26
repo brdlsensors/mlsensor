@@ -60,7 +60,7 @@ end
 out=plateau_sigFilt;
 %%
 inp=inp2;
-freq=10;%hz
+freq=20;%hz
 inptime=1;%sec%based on arduino
 
 inps=length(inp);
@@ -80,7 +80,7 @@ pos=[pos(:,1,:) pos];
 pos=double(pos);
 
 for i=1:3
-    [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline');
+   % [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline');
     
     for j=1:3
         for k=1:2

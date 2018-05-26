@@ -169,13 +169,14 @@ void loop() {
   while (ini < numPoints);
 
   
+// Serial.println(10);
 
 
-
-  if (Serial.available() )
+  if (Serial.available())
   { // read the incoming byte:
     run_stop = Serial.read();
     run_stop=49;
+    // Serial.println(run_stop);
   }
 
 
@@ -307,6 +308,7 @@ void loop() {
     //    Serial.print('\n');
   }
 }
+
 
 
 

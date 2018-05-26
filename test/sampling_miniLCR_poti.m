@@ -1,5 +1,5 @@
 clear; close all; clc
-rng(233566)
+rng(23996)
 
 s = daq.createSession('digilent')
 
@@ -87,7 +87,7 @@ for i=1:1000
     hop(1,i)=fscanf(dev,'%i');
 end
 
-pause(5)
+%pause(5)
 fprintf(dev,'%i',1)
 
 i=1
@@ -95,7 +95,7 @@ tic
 for i = 1:timeStepEnd
     
     % Get current time
-    for kk=1:80
+    for kk=1:50
         [singleReading(i,kk), triggerTime(i,kk)] = inputSingleScan(s);
     end
     

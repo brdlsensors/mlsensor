@@ -1,7 +1,7 @@
-siz=42000;
-sfreq=5;
-lag=10;
-rx=1;
+siz=24000;
+sfreq=1;
+lag=100;
+rx=1:2;
 
 % Downsampling the actual frequency by sfreq.
 inpf=inp(1:sfreq:end);
