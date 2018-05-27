@@ -1,12 +1,12 @@
-siz=24000;
-sfreq=1;
-lag=100;
-rx=1:2;
+sfreq=5; % downsampling frequency.
+siz=190000/sfreq; % size of posp.
+lag=10; % cut off the beginning part.
+rx=1:3; % which sensors to use.
 
 % Downsampling the actual frequency by sfreq.
 inpf=inp(1:sfreq:end);
 outpf=outp(1:sfreq:end,:);
-pospf=posp(:,1:sfreq:end,:);
+pospf=posp(:,1:sfreq:end,:); 
 siz=siz/sfreq;
 
 %outpf(:,2:3)=rand(47200,2);
@@ -82,8 +82,8 @@ opts = trainingOptions('adam', ...
     'LearnRateSchedule','piecewise', ...
     'LearnRateDropPeriod',125, ...
     'LearnRateDropFactor',0.2, ...
-    'Verbose',0, ...
-    'Plots','training-progress');
+    'Verbose',1, ...
+    'Plots','training-progress', 'ExecutionEnvironment', 'gpu');
 
 
 net = trainNetwork(XTrain,YTrain,layers,opts);

@@ -93,7 +93,7 @@ end
 iter = 1;
 gap = Inf;
 while (iter < maxiter)
-
+ 
     if (display)
        % fprintf('%5d %7.2e\n',iter,gap);
     end

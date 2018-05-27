@@ -1,9 +1,9 @@
-% clc
-% clear all
+%clc
+%clear all
 % close all
 
 numSensors = 3;
-%load('t1_4contacts.mat');
+%load('t1.mat');
 
 %%
 
@@ -18,7 +18,7 @@ for i = 1:length(singleReading)
 
     % How to identify array elements that occur more than once
     sig_filt = sig(i,:);
-    idx = find(hist(sig_filt,unique(sig_filt))>4); % current challenge is that histogram sorts manually
+    idx = find(hist(sig_filt,unique(sig_filt)) >= 4); % current challenge is that histogram sorts manually
     uniqVals = unique(sig_filt);
     plateau = uniqVals(idx);
 
@@ -36,6 +36,11 @@ for i = 1:length(singleReading)
     [ordering_sorted, ordering_order] = sort(ordering);
     plateau_sorted = plateau(ordering_order);
     
+    
+%     if(length(plateau_sorted) < 3) % incorporate for the edge cases that
+%     are breaking stuff.
+%        plateau_sorted = [ 
+%     end
     if(length(plateau_sorted) < 4)
        plateau_sorted = [plateau_sorted, plateau_sigs(i-1, end)]; 
     end
@@ -46,22 +51,24 @@ for i = 1:length(singleReading)
     plateau_sigs(i,:) = [plateau_sorted(2), plateau_sorted(4), plateau_sorted(5)];
 end
 
-
+figure(1)
 plot(plateau_sigs,'DisplayName','plateau_sigs')
 
 
-windowSize = 5;
-plateau_sigFilt = zeros(size(plateau_sigs));
-for i=1:numSensors
-    plateau_sigFilt(:,i) = medfilt1(plateau_sigs(:,i), windowSize); % BSTODO: improve this line to not apply the median filter to the entire signal, but rather only the points that are outliers.
-end
-%plot(plateau_sigFilt, 'DisplayName', 'plateau_sigFilt');
+% windowSize = 5;
+% plateau_sigFilt = zeros(size(plateau_sigs));
+% for i=1:numSensors
+%     %plateau_sigFilt(:,i) = medfilt1(plateau_sigs(:,i), windowSize); % BSTODO: improve this line to not apply the median filter to the entire signal, but rather only the points that are outliers.
+% end
+% figure(2)
+% plot(plateau_sigFilt, 'DisplayName', 'plateau_sigFilt');
+% 
+out=plateau_sigs;
 
-out=plateau_sigFilt;
 %%
 inp=inp2;
-freq=20;%hz
-inptime=1;%sec%based on arduino
+freq=50;%hz
+inptime=1; %sec %based on arduino
 
 inps=length(inp);
 %inp=cell2mat(inp);
@@ -80,7 +87,7 @@ pos=[pos(:,1,:) pos];
 pos=double(pos);
 
 for i=1:3
-   % [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline');
+   [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline');
     
     for j=1:3
         for k=1:2
