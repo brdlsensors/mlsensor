@@ -1,5 +1,5 @@
 clear; close all; clc
-rng(547)
+rng(547424)
 
 s = daq.createSession('digilent')
 
