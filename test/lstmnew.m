@@ -1,6 +1,7 @@
 
 sfreq=5; % downsampling frequency.
-siz=240000; % size of posp.
+lag=10;
+siz=length(inp2)-lag-10; % size of posp.
 lag=10; % cut off the beginning part.
 rx=1; % which sensors to use.
 
