@@ -7,11 +7,11 @@
 %   x - input time series.
 %   t - target time series.
 
-siz=149000;
-sfreq=10;
+siz=290000;
+sfreq=5;
 lag=10;
 
-rx=1:2;
+rx=1:3;
 %inp(4+lag:siz+3,1),
 %x=[inp(3+lag:siz+2,1),outp(1+lag:siz,2),outp(2+lag:siz+1,2)]';%,outp(lag:siz-1,1)
 %outp=outp-outp(1,:);
@@ -24,8 +24,8 @@ siz=siz/sfreq;
 
 
 
-%x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
-x=[outpf(3+lag:siz+2,rx)]';
+x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
+%x=[outpf(3+lag:siz+2,rx)]';
 %t=rssq(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
 %t=rssq(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
 t=(squeeze(pospf(1,3+lag:siz+2,2))-squeeze(pospf(1,3+lag:siz+2,1)));
@@ -43,8 +43,8 @@ T = tonndata(t,true,false);
 trainFcn = 'trainlm';  % Levenberg-Marquardt backpropagation.
 
 % Create a Time Delay Network
-inputDelays = 0:2:50;
-hiddenLayerSize = 40;
+inputDelays = 0:5:50;
+hiddenLayerSize = 60;
 net = timedelaynet(inputDelays,hiddenLayerSize,trainFcn);
 %net = distdelaynet({1:5:50,1:2},hiddenLayerSize,trainFcn);
 %net = layrecnet(1,30,trainFcn);

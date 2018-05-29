@@ -1,4 +1,4 @@
-clear; close all; clc
+%clear; close all; clc
 %% VARIABLES
 numSensors = 3;
 freq=10;%hz
@@ -77,7 +77,7 @@ if ( natnetclient.IsConnected == 0 )
 end
 %% Main Data Collection
 
-out = zeros(timeStepEnd,4);
+%out = zeros(timeStepEnd,4);
 
 dev = serial('COM3','BaudRate',250000);
 fopen(dev)
@@ -91,7 +91,7 @@ for i=1:1000
     hop(1,i)=fscanf(dev,'%i');
 end
 
-pause(5)
+
 fprintf(dev,'%i',1)
 
 i=1
@@ -99,18 +99,18 @@ tic
 for i = 1:timeStepEnd
     
     % Get current time
-    for kk=1:80
+    for kk=1:50
         [singleReading(i,kk), triggerTime(i,kk)] = inputSingleScan(s);
     end
     
     t(i,1) = toc;
     sig(i,:) = abs(pwc_cluster(singleReading(i,:),[],0,0.1,1));
     [v, ind] = max(sig(i,:));
-    sig(i,:) = circshift(sig(i,:), n+1-ind);
+    sig(i,:) = circshift(sig(i,:), 50+1-ind);
     
     % How to identify array elements that occur more than once
     sig_filt = sig(i,:);
-    idx = find(hist(sig_filt,unique(sig_filt))>4); % current challenge is that histogram sorts manually
+    idx = find(hist(sig_filt,unique(sig_filt))>=4); % current challenge is that histogram sorts manually
     uniqVals = unique(sig_filt);
     plateau = uniqVals(idx);
     
@@ -139,12 +139,14 @@ for i = 1:timeStepEnd
     
     inp=inp2(1,ceil(t(i,1)));
     if i>1
-        inplstm=[inp,out(1:i,rx),outpf(1:i-1,rx)]';
-        inplstm=[inp,out(i,rx),outpf(i-1,rx)]';
-        [net,YPred_o ]= predictAndUpdateState(net,inplstm);
+       % inplstm=[inp,out(1:i,rx),outpf(1:i-1,rx)]';
+        inplstm=[inp,out(i,:),out(i-1,:)]';
+        [net,YPred_o(:,i) ]= predictAndUpdateState(net,inplstm);
         
+    scatter3(YPred_o(1,i),YPred_o(2,i),YPred_o(3,i))
+    drawnow()
+    hold on
     end
-    
 end
 
 fprintf(dev,'%i',2)
