@@ -1,9 +1,9 @@
-%clc
-%clear all
-% close all
+clc
+clear all
+close all
 
 numSensors = 3;
-%load('t1.mat');
+load('t4contacts.mat');
 
 %%
 
@@ -13,6 +13,20 @@ plateau_sigs = zeros(length(singleReading), numSensors);
 
 for i = 1:length(singleReading)
     sig(i,:) = abs(pwc_cluster(singleReading(i,:),[],0,0.1,1));
+    
+    
+    % Jump penalization
+name{8} = 'Jump penalty';
+x(:,8) = pwc_jumppenalty(y,1,1.0);
+
+% Robust jump penalization
+name{9} = 'Robust jump penalty';
+x(:,9) = pwc_jumppenalty(y,0,1.0);
+
+% Bilateral filter with Gaussian kernel
+name{10} = 'Bilateral filter';
+x(:,10) = pwc_bilateral(y,1,200.0,5);
+
     [v, ind] = max(sig(i,:));
     sig(i,:) = circshift(sig(i,:), n+1-ind);
 
@@ -51,19 +65,23 @@ for i = 1:length(singleReading)
     plateau_sigs(i,:) = [plateau_sorted(2), plateau_sorted(4), plateau_sorted(5)];
 end
 
+
 figure(1)
 plot(plateau_sigs,'DisplayName','plateau_sigs')
 
+%% Filter signal.
 
-windowSize = 5;
-plateau_sigFilt = zeros(size(plateau_sigs));
+windowSize = 20;
+plateau_sigFilt = plateau_sigs;
 for i=1:numSensors
-    %plateau_sigFilt(:,i) = medfilt1(plateau_sigs(:,i), windowSize); % BSTODO: improve this line to not apply the median filter to the entire signal, but rather only the points that are outliers.
+    %plateau_sigFilt(:,i) = filloutliers(plateau_sigs(:,i),'nearest', 'mean');
+    plateau_sigFilt(:,i) = filloutliers(plateau_sigs(:,i),'nearest','movmean',windowSize);
 end
 figure(2)
 plot(plateau_sigFilt, 'DisplayName', 'plateau_sigFilt');
+title(['moving window:' num2str(windowSize)])
 
-out=plateau_sigs;
+out=plateau_sigFilt;
 
 %%
 inp=inp2;
