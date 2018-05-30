@@ -30,7 +30,7 @@ inputSize = size(x,1);
 numResponses =size(t,1);
 
 %t=t+60*randn(1,length(t));
-divi=floor(0.9*length(x));
+divi=floor(0.8*length(x));
 numTimeStepsTrain=divi;
 
 %numTimeStepsTrain = floor(0.9*numel(data));
@@ -68,7 +68,7 @@ YTest = t(:,divi+1:end);
 %YTest = (YTest - mu2) / sig2;
 
 
-numHiddenUnits = 200;
+numHiddenUnits = 300;
 
 layers = [ ...
     sequenceInputLayer(inputSize)

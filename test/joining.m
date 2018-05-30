@@ -1,5 +1,5 @@
 
-siz=49000;
+siz=50000;
 
 %load('t3_4contcts.mat','inp','outp','posp')
 %outp=outp-outp(1,:);

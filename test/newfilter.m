@@ -3,7 +3,7 @@ clear all
 close all
 
 numSensors = 3;
-load('t1.mat');
+load('t3contacts2.mat');
 clear out
 i=0;
 %%
@@ -26,7 +26,7 @@ for i = count:length(singleReading)
     
     %[v, ind] = max(sig(i,:));
     siga(i,:) = circshift(siga(i,:), n+1-ind(1));
-   % sig(i,:)=medfilt1(sig(i,:));
+    siga(i,:)=medfilt1(siga(i,:));
    wtf=(find(siga(i,:)>2.5));
    wtf=wtf(wtf>33);
    if isempty(wtf)
