@@ -3,7 +3,7 @@ clear all
 close all
 
 numSensors = 3;
-load('t3contacts.mat');
+load('t1.mat');
 
 %%
 
