@@ -7,8 +7,8 @@
 %   x - input time series.
 %   t - target time series.
 
-siz=290000;
-sfreq=5;
+siz=190000;
+sfreq=10;
 lag=10;
 
 rx=1:3;
@@ -43,8 +43,8 @@ T = tonndata(t,true,false);
 trainFcn = 'trainlm';  % Levenberg-Marquardt backpropagation.
 
 % Create a Time Delay Network
-inputDelays = 0:5:50;
-hiddenLayerSize = 60;
+inputDelays = 0:10;
+hiddenLayerSize =120;
 net = timedelaynet(inputDelays,hiddenLayerSize,trainFcn);
 %net = distdelaynet({1:5:50,1:2},hiddenLayerSize,trainFcn);
 %net = layrecnet(1,30,trainFcn);
