@@ -3,7 +3,7 @@ clear all
 close all
 
 numSensors = 3;
-load('t3contacts2.mat');
+load('t1rep.mat');
 clear out
 i=0;
 %%

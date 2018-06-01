@@ -1,8 +1,8 @@
 
-sfreq=10; % downsampling frequency.
+sfreq=3; % downsampling frequency.
 lag=10;% cut off the beginning part.
-siz=length(inp)-lag-10; % size of posp.
-rx=1:3; % which sensors to use.
+siz=length(inp)/2-lag-100; % size of posp.
+rx=1; % which sensors to use.
 
 
 % Downsampling the actual frequency by sfreq.
@@ -13,12 +13,12 @@ siz=siz/sfreq;
 
 %outpf(:,2:3)=rand(47200,2);
 
-x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
+%x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
 
 %x=[outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 
 %x=[inpf(3+lag:siz+2,1)]';
-%x=[outpf(3+lag:siz+2,rx)]';
+x=[outpf(3+lag:siz+2,rx)]';
 %x=[outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 %t=squeeze(pospf(1,3+lag:siz+2,2));
 %t=rssq(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
@@ -30,12 +30,12 @@ inputSize = size(x,1);
 numResponses =size(t,1);
 
 %t=t+60*randn(1,length(t));
-divi=floor(0.8*length(x));
+divi=floor(0.9*length(x));
 numTimeStepsTrain=divi;
 
 %numTimeStepsTrain = floor(0.9*numel(data));
-%x=normalize(x,2);
-%t=normalize(t,2);
+% x=normalize(x,2);
+% t=normalize(t,2);
 xm=mean(x');
 xs=std(x');
 tm=mean(t');
