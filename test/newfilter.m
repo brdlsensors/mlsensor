@@ -3,7 +3,7 @@ clear all
 close all
 
 numSensors = 3;
-load('t1rep.mat');
+load('commercialt1rep.mat');
 clear out
 i=0;
 %%
@@ -18,7 +18,7 @@ for i = count:length(singleReading)
  % sig(i,:) = abs(pwc_jumppenalty(singleReading(i,:),1,1.0,0));  % Jump penalization
   %   sig(i,:) = abs(pwc_bilateral(singleReading(i,:),1,200.0,5));% Bilateral filter with Gaussian kernel
 
-     idx=find(siga(i,:)>2.5);
+     idx=find(siga(i,:)>4.5);
     ind= idx(diff(diff(diff(idx)))==0);
     if isempty(ind)
         ind=idx(1);
@@ -27,10 +27,10 @@ for i = count:length(singleReading)
     %[v, ind] = max(sig(i,:));
     siga(i,:) = circshift(siga(i,:), n+1-ind(1));
     siga(i,:)=medfilt1(siga(i,:));
-   wtf=(find(siga(i,:)>2.5));
+   wtf=(find(siga(i,:)>4.5));
    wtf=wtf(wtf>33);
    if isempty(wtf)
-       c=50;
+       c=n;
    else
        c=wtf(1)+1;
    end
@@ -46,19 +46,20 @@ for i = count:length(singleReading)
     unNum   = unique(jk1);
     idx = find(hist(jk1,unNum) >= 3);
     plateau = unNum(idx);
-    out(i,1)=plateau(find(plateau<1.5&plateau>0.5));
-    jk2=(pwc_cluster(sig(a:b),[],0,0.1,1));
+    out(i,1)=plateau(find(plateau<4&plateau>2));
+  %  jk2=(pwc_cluster(sig(a:b),[],0,0.1,1));
+     jk2=(pwc_cluster(sig(a:end),[],0,0.1,1));
         unNum   = unique(jk2);
     idx = find(hist(jk2,unNum) >= 3);
     plateau = unNum(idx);
-    juk= plateau(find(plateau<2.5&plateau>1.1));
+    juk= plateau(find(plateau<4.5&plateau>3.3));
     out(i,2)=juk(1);
-    jk3 =(pwc_cluster(sig(b:end),[],0,0.1,1));
-        unNum   = unique(jk3);
-    idx = find(hist(jk3,unNum) >= 3);
-    plateau = unNum(idx);
-    juk= plateau(find(plateau<2.5&plateau>1.5));
-    out(i,3)=juk(1);
+%     jk3 =(pwc_cluster(sig(b:end),[],0,0.1,1));
+%         unNum   = unique(jk3);
+%     idx = find(hist(jk3,unNum) >= 3);
+%     plateau = unNum(idx);
+%     juk= plateau(find(plateau<2.5&plateau>1.5));
+%     out(i,3)=juk(1);
     
     
 
@@ -102,8 +103,8 @@ out=[out(1,:);out];
 pos=pos(:,1:asd,:);
 pos=[pos(:,1,:) pos];
 pos=double(pos);
-
-for i=1:3
+[sa,sb]=size(out);
+for i=1:sb
    [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline');
     
     for j=1:3

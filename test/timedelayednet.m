@@ -9,9 +9,9 @@
 
 
 sfreq=5; % downsampling frequency.
-lag=10;% cut off the beginning part.
-siz=length(inp)/2-lag-10; % size of posp.
-rx=1:3; % which sensors to use.
+lag=100;% cut off the beginning part.
+siz=length(outp)-lag-100; % size of posp.
+rx=1:2; % which sensors to use.
 
 %inp(4+lag:siz+3,1),
 %x=[inp(3+lag:siz+2,1),outp(1+lag:siz,2),outp(2+lag:siz+1,2)]';%,outp(lag:siz-1,1)
@@ -41,11 +41,11 @@ T = tonndata(t,true,false);
 % 'trainlm' is usually fastest.
 % 'trainbr' takes longer but may be better for challenging problems.
 % 'trainscg' uses less memory. Suitable in low memory situations.
-trainFcn = 'trainlm';  % Levenberg-Marquardt backpropagation.
+trainFcn = 'trainbr';  % Levenberg-Marquardt backpropagation.
 
 % Create a Time Delay Network
-inputDelays = 0:10;
-hiddenLayerSize =70;
+inputDelays = 0:2;
+hiddenLayerSize =60;
 net = timedelaynet(inputDelays,hiddenLayerSize,trainFcn);
 %net = distdelaynet({1:5:50,1:2},hiddenLayerSize,trainFcn);
 %net = layrecnet(1,30,trainFcn);

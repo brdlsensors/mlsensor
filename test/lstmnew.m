@@ -1,8 +1,8 @@
 
-sfreq=3; % downsampling frequency.
+sfreq=5; % downsampling frequency.
 lag=10;% cut off the beginning part.
-siz=length(inp)/2-lag-100; % size of posp.
-rx=1; % which sensors to use.
+siz=length(outp)-lag-100; % size of posp.
+rx=1:2; % which sensors to use.
 
 
 % Downsampling the actual frequency by sfreq.
@@ -30,7 +30,7 @@ inputSize = size(x,1);
 numResponses =size(t,1);
 
 %t=t+60*randn(1,length(t));
-divi=floor(0.9*length(x));
+divi=floor(0.8*length(x));
 numTimeStepsTrain=divi;
 
 %numTimeStepsTrain = floor(0.9*numel(data));
@@ -68,7 +68,7 @@ YTest = t(:,divi+1:end);
 %YTest = (YTest - mu2) / sig2;
 
 
-numHiddenUnits = 300;
+numHiddenUnits = 200;
 
 layers = [ ...
     sequenceInputLayer(inputSize)
