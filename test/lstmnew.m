@@ -1,8 +1,8 @@
 
 sfreq=5; % downsampling frequency.
 lag=10;% cut off the beginning part.
-siz=length(outp)-lag-100; % size of posp.
-rx=1:2; % which sensors to use.
+siz=length(outp)/1-lag-100; % size of posp.
+rx=1; % which sensors to use.
 
 
 % Downsampling the actual frequency by sfreq.
@@ -13,18 +13,23 @@ siz=siz/sfreq;
 
 %outpf(:,2:3)=rand(47200,2);
 
-%x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
+x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
 
 %x=[outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 
+ %x=[inpf(3+lag:siz+2,1)]';
+% t=[outpf(3+lag:siz+2,rx)]';
+
+
 %x=[inpf(3+lag:siz+2,1)]';
-x=[outpf(3+lag:siz+2,rx)]';
+%x=[outpf(3+lag:siz+2,rx)]';
+
 %x=[outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 %t=squeeze(pospf(1,3+lag:siz+2,2));
 %t=rssq(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
 t=(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
 
-
+%%
 
 inputSize = size(x,1);
 numResponses =size(t,1);
@@ -36,6 +41,7 @@ numTimeStepsTrain=divi;
 %numTimeStepsTrain = floor(0.9*numel(data));
 % x=normalize(x,2);
 % t=normalize(t,2);
+
 xm=mean(x');
 xs=std(x');
 tm=mean(t');
@@ -54,36 +60,26 @@ YTrain = t(:,1:divi);
 XTest = x(:,divi+1:end);
 YTest = t(:,divi+1:end);
 
-%  mu = mean(XTrain');
-%  sig = std(XTrain');
-% 
-%   mu2 = mean(YTrain');
-%  sig2 = std(YTrain');
- 
-% XTrain = (XTrain - mu) ./ sig;
-% XTrain =normalize(XTrain,2)
-% YTrain = (YTrain - mu2) / sig2;
-% 
-% XTest = (XTest - mu) / sig;
-%YTest = (YTest - mu2) / sig2;
 
 
-numHiddenUnits = 200;
+
+numHiddenUnits =300;
 
 layers = [ ...
     sequenceInputLayer(inputSize)
-    lstmLayer(numHiddenUnits,'OutputMode','sequence')
+    lstmLayer(numHiddenUnits)%,'OutputMode','last'
     fullyConnectedLayer(numResponses)
     regressionLayer];
 %bilstmLayer
 
 opts = trainingOptions('adam', ...
     'MaxEpochs',550, ...
+    'MiniBatchSize', 512,...
     'GradientThreshold',1, ...
     'InitialLearnRate',0.005, ...
     'LearnRateSchedule','piecewise', ...
-    'LearnRateDropPeriod',125, ...
-    'LearnRateDropFactor',0.2, ...
+    'LearnRateDropPeriod',125*50, ...%%changed
+    'LearnRateDropFactor',0.2/2, ...%%
     'Verbose',0, ...
     'Plots','training-progress', 'ExecutionEnvironment', 'gpu');
 

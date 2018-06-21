@@ -1,38 +1,8 @@
-%siz=2050;
-siz=44000;
-sfreq=1;
-lag=10;
-
-rx=1;
-%inp(4+lag:siz+3,1),
-%x=[inp(3+lag:siz+2,1),outp(1+lag:siz,2),outp(2+lag:siz+1,2)]';%,outp(lag:siz-1,1)
-
-inp=inp(1:sfreq:end);
-outp=outp(1:sfreq:end,:);
-posp=posp(:,1:sfreq:end,:);
-siz=siz/sfreq;
-x=[inp(3+lag:siz+2,1),inp(2+lag:siz+1,1),outp(1+lag:siz,rx),outp(2+lag:siz+1,rx),outp(3+lag:siz+2,rx)]';
-
-x=[outp(3+lag:siz+2,rx) ,-log(yt(3+lag:siz+2,1))]';
-%x=[inp(3+lag:1:siz+2,1),inp(2+lag:1:siz+1,1),yt(3+lag:5:siz+2,1)]';
-
-%x=[inp(3+lag:siz+2,1),inp(2+lag:siz+1,1),outp(1+lag:siz,1),outp(2+lag:siz+1,1)]';
-t=outp(3+lag:siz+2,rx)';
-tt=outp(3+lag:siz+2,rx)';
-
-
-t=t+100*randn(1,length(t));
-%x=outp(:,:)';
-t=squeeze(posp(1,3+lag:siz+2,2));
-
-
-
-%t=[outp(3+lag:siz+2,1),outp(4+lag:siz+3,1)]';
 
 trainFcn = 'trainlm';  % training algorithm 
 
 
-hiddenLayerSize=[55 ];
+hiddenLayerSize=[50];
 net = fitnet(hiddenLayerSize,trainFcn);
 
 

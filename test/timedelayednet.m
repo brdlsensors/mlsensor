@@ -32,7 +32,7 @@ x=[outpf(3+lag:siz+2,rx)]';
 t=(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
 
 
-
+%%
 X = tonndata(x,true,false);
 T = tonndata(t,true,false);
 
@@ -41,7 +41,7 @@ T = tonndata(t,true,false);
 % 'trainlm' is usually fastest.
 % 'trainbr' takes longer but may be better for challenging problems.
 % 'trainscg' uses less memory. Suitable in low memory situations.
-trainFcn = 'trainbr';  % Levenberg-Marquardt backpropagation.
+trainFcn = 'trainlm';  % Levenberg-Marquardt backpropagation.
 
 % Create a Time Delay Network
 inputDelays = 0:2;

@@ -1,6 +1,6 @@
 
 %% LCR Meter Reader
-clear; close all; clc
+clear; clc
 rng(99999)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 60000;
@@ -24,7 +24,7 @@ type = query(obj1, ':FUNCtion:IMPedance:TYPE?');
 
 query(obj1, ':FUNCtion:IMPedance:TYPE ZTD');%%CPD|CPQ|CPG|CPRP|CSD|CSQ|CSRS|LPD|LPQ|LPG|LPRP|LPRD|LSD|LSQ|LSRS|LS
 %%RD|RX|ZTD|ZTR|GB|YTD|YTR|VDID
-query(obj1, ':FREQuency:CW 300000');
+query(obj1, ':FREQuency:CW 10000');
 query(obj1, ':APERture SHORt');%SHORt  MEDium
 query(obj1, ':DISPlay:ENABle 0');%disable display
 
@@ -56,7 +56,7 @@ fopen(dev_mult)
 pause(1)
 
 
-dev = serial('COM3','BaudRate',250000);
+dev = serial('COM3','BaudRate',115200);
 fopen(dev)
 pause(1)
 
@@ -79,6 +79,7 @@ for i = 1:timeStepEnd
     % Get current time
     for count=1:3
         fprintf(dev_mult,'%d/n' ,count);
+        pause(0.001)
         data = query(obj1, ':FETCh:IMPedance:FORMatted?');
         
         splt = strsplit(data,',');
@@ -87,12 +88,12 @@ for i = 1:timeStepEnd
         out(i,2,count) = str2double(splt(2)); % LCR 2
     end
     data_opti = natnetclient.getFrame;
-    for j = 1:2
-        %fprintf( 'Name:"%s"  ', model.RigidBody( 1 ).Name )
-        pos (1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
-        pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
-        pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
-    end
+%     for j = 1:2
+%         %fprintf( 'Name:"%s"  ', model.RigidBody( 1 ).Name )
+%         pos (1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
+%         pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
+%         pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
+%     end
     t(i,1) = toc;
     a=t(i,1);
     
