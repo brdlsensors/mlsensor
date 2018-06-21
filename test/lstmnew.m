@@ -1,5 +1,5 @@
 
-sfreq=5; % downsampling frequency.
+sfreq=2; % downsampling frequency.
 lag=10;% cut off the beginning part.
 siz=length(outp)/1-lag-100; % size of posp.
 rx=1; % which sensors to use.

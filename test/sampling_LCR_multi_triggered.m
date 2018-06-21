@@ -79,7 +79,7 @@ for i = 1:timeStepEnd
     % Get current time
     for count=1:3
         fprintf(dev_mult,'%d/n' ,count);
-        pause(0.001)
+        %pause(0.001)
         data = query(obj1, ':FETCh:IMPedance:FORMatted?');
         
         splt = strsplit(data,',');
@@ -88,12 +88,12 @@ for i = 1:timeStepEnd
         out(i,2,count) = str2double(splt(2)); % LCR 2
     end
     data_opti = natnetclient.getFrame;
-%     for j = 1:2
-%         %fprintf( 'Name:"%s"  ', model.RigidBody( 1 ).Name )
-%         pos (1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
-%         pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
-%         pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
-%     end
+    for j = 1:2
+        %fprintf( 'Name:"%s"  ', model.RigidBody( 1 ).Name )
+        pos(1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
+        pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
+        pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
+    end
     t(i,1) = toc;
     a=t(i,1);
     
@@ -115,7 +115,7 @@ fclose(dev_mult);
 %inp={0.2, 0,0.4,0.5,0.6,0.9,0.4,1.2,1.3,2.9,2.3,1.2,2.3,1.5,2.5,2.4,2.3,2.1,2.5,0,1.5,0,2.5,2,1.7,1.5,1,0.1,3.5,2.5,0.5,3.4,1.2,1.9,2.5};
 
 inp=inp2;
-freq=50;%hz
+freq=20;%hz
 inptime=2;%sec%based on arduino
 
 inps=length(inp);
