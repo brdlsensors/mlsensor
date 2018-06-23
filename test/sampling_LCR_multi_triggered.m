@@ -1,7 +1,7 @@
 
 %% LCR Meter Reader
 clear; clc
-rng(99999)
+rng(3536)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
 % Find a VISA-USB object.
