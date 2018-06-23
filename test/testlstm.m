@@ -1,5 +1,5 @@
 %siz=49000;
-% sfreq=5;
+% sfreq=4;
 lag=10;
 %
 % rx=1:2;
@@ -9,10 +9,10 @@ lag=10;
 %x=[inp(3+lag:siz+2,1),outp(1+lag:siz,2),outp(2+lag:siz+1,2)]';%,outp(lag:siz-1,1)
 %outp=outp-outp(1,:);
 
-inpf=inp(1:sfreq:end);
-outpf=outp(1:sfreq:end,:);
+inpf=inp(1:sfreq:end)-0;
+outpf=outp(1:sfreq:end,:)*1;
 pospf=posp(:,1:sfreq:end,:);
-siz=siz/sfreq;
+%siz=siz/sfreq;
 
 
 

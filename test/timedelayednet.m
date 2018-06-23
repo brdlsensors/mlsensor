@@ -44,7 +44,7 @@ T = tonndata(t,true,false);
 trainFcn = 'trainlm';  % Levenberg-Marquardt backpropagation.
 
 % Create a Time Delay Network
-inputDelays = 0:2;
+inputDelays = 0:5;
 hiddenLayerSize =60;
 net = timedelaynet(inputDelays,hiddenLayerSize,trainFcn);
 %net = distdelaynet({1:5:50,1:2},hiddenLayerSize,trainFcn);

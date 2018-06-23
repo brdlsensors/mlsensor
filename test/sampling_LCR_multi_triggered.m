@@ -3,7 +3,7 @@
 clear; clc
 rng(99999)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
-timeStepEnd = 60000;
+timeStepEnd = 15000;
 % Find a VISA-USB object.
 obj1 = instrfind('Type', 'visa-usb', 'RsrcName', 'USB0::0x0957::0x0909::MY54202935::0::INSTR', 'Tag', '');
 
@@ -22,9 +22,9 @@ fopen(obj1);
 % Communicating with instrument object, obj1.
 type = query(obj1, ':FUNCtion:IMPedance:TYPE?');
 
-query(obj1, ':FUNCtion:IMPedance:TYPE ZTD');%%CPD|CPQ|CPG|CPRP|CSD|CSQ|CSRS|LPD|LPQ|LPG|LPRP|LPRD|LSD|LSQ|LSRS|LS
+query(obj1, ':FUNCtion:IMPedance:TYPE RX');%%CPD|CPQ|CPG|CPRP|CSD|CSQ|CSRS|LPD|LPQ|LPG|LPRP|LPRD|LSD|LSQ|LSRS|LS
 %%RD|RX|ZTD|ZTR|GB|YTD|YTR|VDID
-query(obj1, ':FREQuency:CW 10000');
+query(obj1, ':FREQuency:CW 300000');
 query(obj1, ':APERture SHORt');%SHORt  MEDium
 query(obj1, ':DISPlay:ENABle 0');%disable display
 
@@ -79,7 +79,9 @@ for i = 1:timeStepEnd
     % Get current time
     for count=1:3
         fprintf(dev_mult,'%d/n' ,count);
-        %pause(0.001)
+        if count==1
+           pause(0.015)
+        end
         data = query(obj1, ':FETCh:IMPedance:FORMatted?');
         
         splt = strsplit(data,',');
@@ -95,7 +97,7 @@ for i = 1:timeStepEnd
         pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
     end
     t(i,1) = toc;
-    a=t(i,1);
+    %a=t(i,1);
     
 end
 
@@ -134,15 +136,16 @@ pos=pos(:,1:asd,:);
 pos=[pos(:,1,:) pos];
 pos=double(pos);
 
-for i=1:2
+for i=1:6
     [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline');
     
+
+end
+for i=1:2
     for j=1:3
         
         [posp(j,:,i),yt]=resample(squeeze(pos(j,:,i)),t(:,1),freq,'spline');
     end
 end
-
-
 % stp=floor(length(yt)/(inps*inptime*freq));
 % inp=repmat(inp,stp,1);
