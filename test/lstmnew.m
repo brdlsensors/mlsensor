@@ -1,7 +1,7 @@
 
-sfreq=1; % downsampling frequency.
+sfreq=2; % downsampling frequency.
 lag=10;% cut off the beginning part.
-siz=length(outp)/5-lag-100; % size of posp.
+siz=length(outp)/1-lag-100; % size of posp.
 rx=1:6; % which sensors to use.
 
 
@@ -27,7 +27,7 @@ x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
 %x=[outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 %t=squeeze(pospf(1,3+lag:siz+2,2));
 %t=rssq(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
-t=(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
+t=(squeeze(pospf(1,3+lag:siz+2,2))-squeeze(pospf(1,3+lag:siz+2,1)));
 
 %%
 
@@ -63,7 +63,7 @@ YTest = t(:,divi+1:end);
 
 
 
-numHiddenUnits =350;
+numHiddenUnits =300;
 
 layers = [ ...
     sequenceInputLayer(inputSize)
