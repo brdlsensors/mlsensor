@@ -63,7 +63,7 @@ YTest = t(:,divi+1:end);
 
 
 
-numHiddenUnits =300;
+numHiddenUnits =150;
 
 layers = [ ...
     sequenceInputLayer(inputSize)
@@ -122,7 +122,14 @@ err=rssq(YPred_o-t);
 
 
 
-
+% for i=1:18955
+%     if squeeze(posp(3,i,1)) <-110
+%         a=posp(:,i,1);
+%         b=posp(:,i,2);
+%         posp(:,i,1)=b;
+%         posp(:,i,2)=a;
+%     end
+% end
 % data=x(1,:);
 % figure
 % plot(data(1:numTimeStepsTrain))

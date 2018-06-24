@@ -98,7 +98,9 @@ for i = 1:timeStepEnd
     end
     t(i,1) = toc;
     %a=t(i,1);
-    
+    if i==13000
+        i
+    end
 end
 
 fprintf(dev,'%i',2)

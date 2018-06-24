@@ -99,11 +99,18 @@ for i = 1:timeStepEnd
     end
     
     t(i,1) = toc;
+
     inp=inp2(1,ceil(t(i,1)));
-    outr=out(i,:);
+    outr(i,:)=out(i,:);
+
      if i>1
+       for k=1:6
+         [outp(:,k),yt]=resample(outi(i-1:i,k),t(i-1:i,1),20,'linear');
+    
+ 
+        end
        % inplstm=[inp,out(1:i,rx),outpf(1:i-1,rx)]';
-        inplstm=[inp,outr]';
+        inplstm=[inp,outp]';
         inplstm= inplstm-xm(:);
         inplstm= inplstm./xs(:);
         [net,YPred_o(:,i) ]= predictAndUpdateState(net,inplstm);
