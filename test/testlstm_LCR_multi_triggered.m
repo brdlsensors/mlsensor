@@ -1,6 +1,7 @@
 
 %% LCR Meter Reader
 clear out
+clear t
 rng(3536)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
@@ -89,24 +90,29 @@ for i = 1:timeStepEnd
         out(i,1,count) = str2double(splt(1)); % LCR 1
         out(i,2,count) = str2double(splt(2)); % LCR 2
     end
-%     data_opti = natnetclient.getFrame;
-%     for j = 1:2
-%         %fprintf( 'Name:"%s"  ', model.RigidBody( 1 ).Name )
-%         pos(1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
-%         pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
-%         pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
-%     end
-%     
+    data_opti = natnetclient.getFrame;
+    for j = 1:2
+        %fprintf( 'Name:"%s"  ', model.RigidBody( 1 ).Name )
+        pos(1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
+        pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
+        pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
+    end
+    
     t(i,1) = toc;
     inp=inp2(1,ceil(t(i,1)));
     outr=out(i,:);
      if i>1
        % inplstm=[inp,out(1:i,rx),outpf(1:i-1,rx)]';
         inplstm=[inp,outr]';
+        inplstm= inplstm-xm(:);
+        inplstm= inplstm./xs(:);
         [net,YPred_o(:,i) ]= predictAndUpdateState(net,inplstm);
-        
-    plot(YPred_o(1,i))
-    drawnow()
+        YPred_o(1,i)=YPred_o(1,i)*ts(1);
+         YPred_o(2,i)=YPred_o(2,i)*ts(2);
+         YPred_o(3,i)=YPred_o(2,i)*ts(3);
+  %  scatter(YPred_o(1,i),YPred_o(2,i))
+    % plot(YPred_o(1,1:i))
+    %drawnow()
     hold on
     end
     
