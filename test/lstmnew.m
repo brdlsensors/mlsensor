@@ -2,7 +2,7 @@
 sfreq=2; % downsampling frequency.
 lag=10;% cut off the beginning part.
 siz=length(outp)/1-lag-100; % size of posp.
-rx=1; % which sensors to use.
+rx=1:6; % which sensors to use.
 
 
 % Downsampling the actual frequency by sfreq.
@@ -63,7 +63,7 @@ YTest = t(:,divi+1:end);
 
 
 
-numHiddenUnits =200;
+numHiddenUnits =300;
 
 layers = [ ...
     sequenceInputLayer(inputSize)
@@ -78,8 +78,8 @@ opts = trainingOptions('adam', ...
     'GradientThreshold',1, ...
     'InitialLearnRate',0.005, ...
     'LearnRateSchedule','piecewise', ...
-    'LearnRateDropPeriod',125*50, ...%%changed
-    'LearnRateDropFactor',0.2/2, ...%%
+    'LearnRateDropPeriod',125*10, ...%%changed
+    'LearnRateDropFactor',0.2/1, ...%%
     'Verbose',0, ...
     'Plots','training-progress', 'ExecutionEnvironment', 'gpu');
 

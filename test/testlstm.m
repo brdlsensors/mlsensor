@@ -24,7 +24,7 @@ x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
 %x=[outpf(3+lag:siz+2,rx)]';
 %t=squeeze(pospf(1,3+lag:siz+2,2));
 %t=rssq(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
-t=(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
+t=(squeeze(pospf(1,3+lag:siz+2,2))-squeeze(pospf(1,3+lag:siz+2,1)));
 
 
 inputSize = size(x,1);
