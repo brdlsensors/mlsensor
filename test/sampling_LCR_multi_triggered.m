@@ -118,7 +118,7 @@ fclose(dev_mult);
 
 inp=inp2;
 freq=20;%hz
-inptime=2;%sec%based on arduino
+inptime=1;%sec%based on arduino
 
 inps=length(inp);
 %inp=cell2mat(inp);
