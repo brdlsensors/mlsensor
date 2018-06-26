@@ -1,9 +1,9 @@
 
 %% LCR Meter Reader
 clear; clc
-rng(34676)
+rng(348776)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
-timeStepEnd = 15000;
+timeStepEnd = 20000;
 % Find a VISA-USB object.
 obj1 = instrfind('Type', 'visa-usb', 'RsrcName', 'USB0::0x0957::0x0909::MY54202935::0::INSTR', 'Tag', '');
 
@@ -98,7 +98,7 @@ for i = 1:timeStepEnd
     end
     t(i,1) = toc;
     %a=t(i,1);
-    if i==13000
+    if mod(i,1000)==0
         i
     end
 end

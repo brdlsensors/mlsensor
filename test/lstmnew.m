@@ -1,8 +1,8 @@
 
 sfreq=2; % downsampling frequency.
 lag=10;% cut off the beginning part.
-siz=length(outp)/1-lag-100; % size of posp.
-rx=1:6; % which sensors to use.
+siz=length(outp)/2-lag-100; % size of posp.
+rx=[1:6]; % which sensors to use.
 
 
 % Downsampling the actual frequency by sfreq.
@@ -14,9 +14,9 @@ siz=siz/sfreq;
 %outpf(:,2:3)=rand(47200,2);
 
 x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
-
+%x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 %x=[outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
-
+%x=[outpf(3+lag:siz+2,rx)]';
  %x=[inpf(3+lag:siz+2,1)]';
 % t=[outpf(3+lag:siz+2,rx)]';
 
@@ -28,14 +28,14 @@ x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
 %t=squeeze(pospf(1,3+lag:siz+2,2));
 %t=rssq(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
 t=(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
-
+%t=[inpf(2+lag:siz+1,1)]';
 %%
 
 inputSize = size(x,1);
 numResponses =size(t,1);
 
 %t=t+60*randn(1,length(t));
-divi=floor(0.8*length(x));
+divi=floor(0.9*length(x));
 numTimeStepsTrain=divi;
 
 %numTimeStepsTrain = floor(0.9*numel(data));
@@ -55,6 +55,9 @@ for z=1:numResponses
      t(z,:)= t(z,:)/ts(z);
 end
 
+x=normalize(x,2);
+t=normalize(t,2);
+
 XTrain = x(:,1:divi);
 YTrain = t(:,1:divi);
 XTest = x(:,divi+1:end);
@@ -63,7 +66,7 @@ YTest = t(:,divi+1:end);
 
 
 
-numHiddenUnits =150;
+numHiddenUnits =30;
 
 layers = [ ...
     sequenceInputLayer(inputSize)
@@ -73,10 +76,10 @@ layers = [ ...
 %bilstmLayer
 
 opts = trainingOptions('adam', ...
-    'MaxEpochs',550, ...
+    'MaxEpochs',400, ...
     'MiniBatchSize', 512,... %%%512
     'GradientThreshold',1, ...
-    'InitialLearnRate',0.005, ...
+    'InitialLearnRate',0.005*1, ...
     'LearnRateSchedule','piecewise', ...
     'LearnRateDropPeriod',125*10, ...%%changed
     'LearnRateDropFactor',0.2/1, ...%%
@@ -95,12 +98,15 @@ for z=1:numResponses
      t(z,:)= t(z,:)*ts(z);
      YPred_o(z,:)=YPred_o(z,:)*ts(z);
 end
+
+
 plot(YPred_o(1,:),'r')
 hold on
 plot(t(1,:),'b')
 
 err=rssq(YPred_o-t);
- mean(err)
+ test_s=0.8*length(err);
+ mean(err(test_s:end))
  
 % numTimeStepsTest = length(XTest);
 % for i = 2:numTimeStepsTest

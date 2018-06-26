@@ -2,6 +2,8 @@
 %% LCR Meter Reader
 clear out
 clear t
+clear outp
+clear pos
 rng(3536)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
@@ -101,26 +103,27 @@ for i = 1:timeStepEnd
     t(i,1) = toc;
 
     inp=inp2(1,ceil(t(i,1)));
-    outr(i,:)=out(i,:);
+    outr(i,:)=out(i,:)-out(1,:)+[4673 -1912 2778 -1358 3046 -1263];
 
      if i>1
        for k=1:6
-         [outp(:,k),yt]=resample(outi(i-1:i,k),t(i-1:i,1),20,'linear');
+        % [tempval,yt]=resample(outr(i-1:i,k),t(i-1:i,1),10,'linear');
     
- 
+        outp(1,k)=outr(i-1,k)+(outr(i,k)-outr(i-1,k))*0.1/(t(i)-t(i-1));
         end
        % inplstm=[inp,out(1:i,rx),outpf(1:i-1,rx)]';
-        inplstm=[inp,outp]';
+        inplstm=[inp,outp(1,:)]';
         inplstm= inplstm-xm(:);
         inplstm= inplstm./xs(:);
         [net,YPred_o(:,i) ]= predictAndUpdateState(net,inplstm);
-        YPred_o(1,i)=YPred_o(1,i)*ts(1);
-         YPred_o(2,i)=YPred_o(2,i)*ts(2);
-         YPred_o(3,i)=YPred_o(2,i)*ts(3);
+        YPred_o(1,i)=YPred_o(1,i)*ts(1)+tm(1);
+         YPred_o(2,i)=YPred_o(2,i)*ts(2)+tm(2);
+         YPred_o(3,i)=YPred_o(2,i)*ts(3)+tm(3);
   %  scatter(YPred_o(1,i),YPred_o(2,i))
-    % plot(YPred_o(1,1:i))
-    %drawnow()
+     plot(YPred_o(1,1:i),'b')
+    drawnow()
     hold on
+    plot(squeeze(pos(1,1:i,2))-squeeze(pos(1,1:i,1)),'r')
     end
     
     %a=t(i,1);
