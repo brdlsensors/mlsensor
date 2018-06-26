@@ -102,14 +102,9 @@ for i = 1:timeStepEnd
         pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
     end
     t(i,1) = toc;
-<<<<<<< HEAD
     % Print a message at approximately 80% for the point to start
     % generating testing data.
     if 0 == mod(i,1000)
-=======
-    %a=t(i,1);
-    if mod(i,1000)==0
->>>>>>> 189323d040cdc434865263d2fc02b810c0d47edd
         i
     end
 end
