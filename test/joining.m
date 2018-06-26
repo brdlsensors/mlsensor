@@ -13,8 +13,8 @@ a1=[a1; inp];
 b1=[b1; outp];
 c1=cat(2,c1, posp);
 %%
-a1=[ inp];
-b1=[ outp];
+a1=[inp];
+b1=[outp];
 c1=posp;
 %%
  

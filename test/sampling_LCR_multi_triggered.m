@@ -118,7 +118,7 @@ fclose(dev_mult);
 
 
 inp=inp2;
-freq=20;%hz
+freq=20;% sampling frequency of data [hz]
 inptime=1;%sec%based on arduino
 
 inps=length(inp);
@@ -131,17 +131,17 @@ tIntervals=length(t);
 t=[0;t]; % Assume that t=0 is when the input starts (this might not be true because of loop delay in Arduino).
 
 % Take the starting value and use it as the value at t = 0.
-out=out(1:tIntervals,:); % Take the first tIntervals of the out matrix.
+out=out(1:tIntervals,:); % Take the first tIntervals of the out matrix and merge from 3d matrix to 2d matrix (collapse a dimension using test(n,:))
 out=[out(1,:);out]; % Duplicate first row of the out matrix.
 pos=pos(:,1:tIntervals,:);
 pos=[pos(:,1,:) pos];
 pos=double(pos);
 
-for i=1:6 % 6 total channels of the multiplexer.
-    [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline'); % interpolate the outp signal.
+for i=1:6 % 6 total RX pairs of the LCR.
+    [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline'); % interpolate the outp signal. spline has some vibration at the start/beginning of signal.
 end
-for i=1:2 % 2 channels associated with each sensor.
-    for j=1:3 % 3 sensors (resistors)
+for i=1:2 % 2 markers.
+    for j=1:3 % 3 coordinates xyz per marker.
         [posp(j,:,i),yt]=resample(squeeze(pos(j,:,i)),t(:,1),freq,'spline'); % interpolate the outp signal.
     end
 end

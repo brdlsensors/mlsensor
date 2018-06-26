@@ -93,41 +93,54 @@ for i = 1:timeStepEnd
         out(i,2,count) = str2double(splt(2)); % LCR 2
     end
     data_opti = natnetclient.getFrame;
+    
+    %%%%%%%%%%%%%%%%
+    % Optional if you don't want/have the optitrack. (any and other parts
+    % with data_opti).
     for j = 1:2
         %fprintf( 'Name:"%s"  ', model.RigidBody( 1 ).Name )
         pos(1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
         pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
         pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
     end
+    %%%%%%%%%%%%%%%
     
     t(i,1) = toc;
 
+    %% Online learning.
     inp=inp2(1,ceil(t(i,1)));
-    outr(i,:)=out(i,:)-out(1,:)+[4673 -1912 2778 -1358 3046 -1263];
+    outr(i,:)=out(i,:); %-out(1,:)+[4673 -1912 2778 -1358 3046 -1263];
 
-     if i>1
-       for k=1:6
-        % [tempval,yt]=resample(outr(i-1:i,k),t(i-1:i,1),10,'linear');
-    
-        outp(1,k)=outr(i-1,k)+(outr(i,k)-outr(i-1,k))*0.1/(t(i)-t(i-1));
+    if i>1
+        for k=1:6 % RX channels x3, for 3 sensors.
+            % [tempval,yt]=resample(outr(i-1:i,k),t(i-1:i,1),10,'linear');
+            % ???
+            outp(1,k)=outr(i-1,k)+(outr(i,k)-outr(i-1,k))*0.1/(t(i)-t(i-1));
         end
-       % inplstm=[inp,out(1:i,rx),outpf(1:i-1,rx)]';
+        % inplstm=[inp,out(1:i,rx),outpf(1:i-1,rx)]';
         inplstm=[inp,outp(1,:)]';
+        
+        % Normalize the input for LSTM.
         inplstm= inplstm-xm(:);
         inplstm= inplstm./xs(:);
+        
+        % NN predict and update state. 
         [net,YPred_o(:,i) ]= predictAndUpdateState(net,inplstm);
+        % Undo normalization.
         YPred_o(1,i)=YPred_o(1,i)*ts(1)+tm(1);
-         YPred_o(2,i)=YPred_o(2,i)*ts(2)+tm(2);
-         YPred_o(3,i)=YPred_o(2,i)*ts(3)+tm(3);
-  %  scatter(YPred_o(1,i),YPred_o(2,i))
-     plot(YPred_o(1,1:i),'b')
-    drawnow()
-    hold on
-    plot(squeeze(pos(1,1:i,2))-squeeze(pos(1,1:i,1)),'r')
+        YPred_o(2,i)=YPred_o(2,i)*ts(2)+tm(2);
+        YPred_o(3,i)=YPred_o(2,i)*ts(3)+tm(3);
+        
+        % Plotting.
+        %  scatter(YPred_o(1,i),YPred_o(2,i))
+        plot(YPred_o(1,1:i),'b')
+        drawnow()
+        hold on
+        plot(squeeze(pos(1,1:i,2))-squeeze(pos(1,1:i,1)),'r')
     end
-    
+
     %a=t(i,1);
-    
+
 end
 
 fprintf(dev,'%i',2)
