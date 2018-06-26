@@ -1,9 +1,9 @@
 
 %% LCR Meter Reader
 clear; clc
-rng(34676)
+rng(348776)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
-timeStepEnd = 15000;
+timeStepEnd = 20000;
 % Find a VISA-USB object.
 obj1 = instrfind('Type', 'visa-usb', 'RsrcName', 'USB0::0x0957::0x0909::MY54202935::0::INSTR', 'Tag', '');
 
@@ -102,9 +102,14 @@ for i = 1:timeStepEnd
         pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
     end
     t(i,1) = toc;
+<<<<<<< HEAD
     % Print a message at approximately 80% for the point to start
     % generating testing data.
     if 0 == mod(i,1000)
+=======
+    %a=t(i,1);
+    if mod(i,1000)==0
+>>>>>>> 189323d040cdc434865263d2fc02b810c0d47edd
         i
     end
 end

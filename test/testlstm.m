@@ -1,4 +1,4 @@
-%siz=49000;
+siz=9000;
 % sfreq=4;
 lag=10;
 %
@@ -9,8 +9,8 @@ lag=10;
 %x=[inp(3+lag:siz+2,1),outp(1+lag:siz,2),outp(2+lag:siz+1,2)]';%,outp(lag:siz-1,1)
 %outp=outp-outp(1,:);
 
-inpf=inp(1:sfreq:end)-0;
-outpf=outp(1:sfreq:end,:)*1;
+inpf=inp(1:sfreq:end);
+outpf=outp(1:sfreq:end,:);
 pospf=posp(:,1:sfreq:end,:);
 %siz=siz/sfreq;
 
@@ -21,10 +21,11 @@ pospf=posp(:,1:sfreq:end,:);
 
 %x=[inpf(3+lag:siz+2,1)]';
 x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
-%x=[outpf(3+lag:siz+2,rx)]';
+
+
 %t=squeeze(pospf(1,3+lag:siz+2,2));
 %t=rssq(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
-t=(squeeze(pospf(1,3+lag:siz+2,2))-squeeze(pospf(1,3+lag:siz+2,1)));
+t=(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
 
 
 inputSize = size(x,1);
@@ -48,8 +49,8 @@ for z=1:numResponses
     t(z,:)= t(z,:)/ts(z);
 end
 
-% x=normalize(x,2);
-% t=normalize(t,2);
+x=normalize(x,2);
+t=normalize(t,2);
 tic
 [net,YPred_o ]= predictAndUpdateState(net,x);
 toc
