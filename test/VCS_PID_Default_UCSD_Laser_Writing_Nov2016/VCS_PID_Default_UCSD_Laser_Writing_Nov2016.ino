@@ -171,7 +171,7 @@ void loop() {
   
 // Serial.println(10);
 
-
+  // Begin running upon reading a '1' over serial. 
   if (Serial.available())
   { // read the incoming byte:
     run_stop = Serial.read();
