@@ -1,7 +1,7 @@
 
 sfreq=2; % downsampling frequency.
 lag=10;% cut off the beginning part.
-siz=length(outp)/2-lag-100; % size of posp (position matrix)..
+siz=length(outp)/1-lag-100; % size of posp (position matrix)..
 rx=[1:6]; % which RX pairs of the LCR to use.
 
 
@@ -42,7 +42,7 @@ numResponses = size(t,1);
 
 % Where to split the data between testing and training..
 %t=t+60*randn(1,length(t));
-divi=floor(0.9*length(x));
+divi=floor(0.8*length(x));
 numTimeStepsTrain=divi;
 
 %numTimeStepsTrain = floor(0.9*numel(data));
@@ -75,8 +75,7 @@ YTest = t(:,divi+1:end);
 
 
 %% Parameters for LSTM.
-
-numHiddenUnits = 30;
+numHiddenUnits = 50;
 % Computational capability/complexity of the network. 30 is picked via trial and
 % error. As small as possible to prevent overfitting. Want the smallest
 % layer that can predict position AND contact. Should also be able to
@@ -84,18 +83,19 @@ numHiddenUnits = 30;
 
 layers = [ ...
     sequenceInputLayer(inputSize)
+    dropoutLayer(0.5) %dropout should prevent overfitting and make predicitons more robust to noise
     lstmLayer(numHiddenUnits)%,'OutputMode','last'
     fullyConnectedLayer(numResponses)
     regressionLayer];
 %bilstmLayer
 
 opts = trainingOptions('adam', ...
-    'MaxEpochs',400, ... % number of training iterations.
+    'MaxEpochs',500, ... % number of training iterations.
     'MiniBatchSize', 512,... %%%512
     'GradientThreshold',1, ...
-    'InitialLearnRate',0.005*1, ...
+    'InitialLearnRate',0.005*2, ...
     'LearnRateSchedule','piecewise', ...
-    'LearnRateDropPeriod',125*10, ...%%changed
+    'LearnRateDropPeriod',125*5, ...%%changed
     'LearnRateDropFactor',0.2/1, ...%%
     'Verbose',0, ...
     'Plots','training-progress', 'ExecutionEnvironment', 'gpu');
@@ -120,7 +120,7 @@ plot(t(1,:),'b')
 
 % Error. 
 err=rssq(YPred_o-t);
-test_s=0.9*length(err);
+test_s=0.8*length(err);
 mean(err(test_s:end)) % mean error for only the test set.
  
 % numTimeStepsTest = length(XTest);

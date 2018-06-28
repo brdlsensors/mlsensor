@@ -1,4 +1,4 @@
-siz=9000;
+siz=length(outp)/1-lag-100;
 % sfreq=4;
 lag=10;
 %
@@ -12,7 +12,7 @@ lag=10;
 inpf=inp(1:sfreq:end);
 outpf=outp(1:sfreq:end,:);
 pospf=posp(:,1:sfreq:end,:);
-%siz=siz/sfreq;
+siz=siz/sfreq;
 
 
 
@@ -49,8 +49,9 @@ for z=1:numResponses
     t(z,:)= t(z,:)/ts(z);
 end
 
-x=normalize(x,2);
-t=normalize(t,2);
+%x=normalize(x,2);
+%t=normalize(t,2);
+%x(4:5,:)=0;
 tic
 [net,YPred_o ]= predictAndUpdateState(net,x);
 toc
