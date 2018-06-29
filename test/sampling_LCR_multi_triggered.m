@@ -1,9 +1,9 @@
 
 %% LCR Meter Reader
 clear; clc
-rng(348776)
+rng(2343)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
-timeStepEnd = 20000;
+timeStepEnd = 15000;
 % Find a VISA-USB object.
 obj1 = instrfind('Type', 'visa-usb', 'RsrcName', 'USB0::0x0957::0x0909::MY54202935::0::INSTR', 'Tag', '');
 
@@ -60,8 +60,8 @@ dev = serial('COM3','BaudRate',115200);
 fopen(dev)
 pause(1)
 
-% Send random values for the actuation to the controller. 
-inp2=35*rand(1,1000); % pick 1000 random values between 0 to 3.5 bars 
+% Send random values for the actuation to the controller.
+inp2=35*rand(1,1000); % pick 1000 random values between 0 to 3.5 bars
 % (this range includes the scaling performed in the Arduino code, which is
 % sent this way because it's easier to send the data as an integer).
 inp2=round(inp2);
@@ -72,12 +72,12 @@ for i=1:1000
     hop(1,i)=fscanf(dev,'%i');
 end
 clear i
-fprintf(dev,'%i',1) % Start the controller. 
+fprintf(dev,'%i',1) % Start the controller.
 % [Possibly a synchronization issue here with simultaneous trigger - maybe the reason for small delay]
 
 
 
-% Read the resulting multiplexed data from the LCR. 
+% Read the resulting multiplexed data from the LCR.
 i=1
 tic
 for i = 1:timeStepEnd
@@ -85,7 +85,12 @@ for i = 1:timeStepEnd
     for count=1:3
         fprintf(dev_mult,'%d/n' ,count);
         if 1 == count
-           pause(0.015)
+            data_opti = natnetclient.getFrame;
+            for j = 1:2
+                pos(1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
+                pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
+                pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
+            end
         end
         data = query(obj1, ':FETCh:IMPedance:FORMatted?');
         
@@ -95,12 +100,12 @@ for i = 1:timeStepEnd
         out(i,2,count) = str2double(splt(2)); % LCR channel 2
     end
     % Get the position of the end effector based on the optitrack reading.
-    data_opti = natnetclient.getFrame;
-    for j = 1:2
-        pos(1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
-        pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
-        pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
-    end
+    %     data_opti = natnetclient.getFrame;
+    %     for j = 1:2
+    %         pos(1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
+    %         pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
+    %         pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
+    %     end
     t(i,1) = toc;
     % Print a message at approximately 80% for the point to start
     % generating testing data.
