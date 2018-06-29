@@ -7,6 +7,7 @@ clear pos
 rng(3536)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
+
 % Find a VISA-USB object.
 obj1 = instrfind('Type', 'visa-usb', 'RsrcName', 'USB0::0x0957::0x0909::MY54202935::0::INSTR', 'Tag', '');
 
@@ -130,10 +131,45 @@ for i = 1:timeStepEnd
         
         % Plotting.
         %  scatter(YPred_o(1,i),YPred_o(2,i))
-        plot(YPred_o(1,1:i),'b')
-        drawnow()
-        hold on
-        plot(squeeze(pos(1,1:i,2))-squeeze(pos(1,1:i,1)),'r') % *position COULD be off slightly because it's not being interpolated upon.
+%         plot(YPred_o(1,1:i),'b')
+%         drawnow()
+%         hold on
+%         plot(squeeze(pos(1,1:i,2))-squeeze(pos(1,1:i,1)),'r') % *position COULD be off slightly because it's not being interpolated upon.
+        if i > 10
+            hold on;
+            view(0,90);
+            grid on;
+            
+            % predicted
+            plot3(YPred_o(1,i),YPred_o(2,i),YPred_o(3,i), 'o', 'MarkerSize', 14, 'MarkerEdgeColor', 'blue');
+            plot3(YPred_o(1,i-1),YPred_o(2,i-1),YPred_o(3,i-1), 'o', 'MarkerSize', 12, 'MarkerEdgeColor', 'blue') ;
+            plot3(YPred_o(1,i-2),YPred_o(2,i-2),YPred_o(3,i-2), 'o', 'MarkerSize', 10, 'MarkerEdgeColor', 'blue') ;
+            plot3(YPred_o(1,i-3),YPred_o(2,i-3),YPred_o(3,i-3), 'o', 'MarkerSize', 8, 'MarkerEdgeColor', 'blue') ;
+            plot3(YPred_o(1,i-4),YPred_o(2,i-4),YPred_o(3,i-4), 'o', 'MarkerSize', 6, 'MarkerEdgeColor', 'blue') ;
+            plot3(YPred_o(1,i-5),YPred_o(2,i-5),YPred_o(3,i-5), 'o', 'MarkerSize', 5, 'MarkerEdgeColor', 'blue') ;
+            plot3(YPred_o(1,i-6),YPred_o(2,i-6),YPred_o(3,i-6), 'o', 'MarkerSize', 4, 'MarkerEdgeColor', 'blue') ;
+            plot3(YPred_o(1,i-7),YPred_o(2,i-7),YPred_o(3,i-7), 'o', 'MarkerSize', 3, 'MarkerEdgeColor', 'blue') ;
+            plot3(YPred_o(1,i-8),YPred_o(2,i-8),YPred_o(3,i-8), 'o', 'MarkerSize', 2, 'MarkerEdgeColor', 'blue') ;
+            plot3(YPred_o(1,i-9),YPred_o(2,i-9),YPred_o(3,i-9), 'o', 'MarkerSize', 1, 'MarkerEdgeColor', 'blue') ;
+
+            % actual
+            plot3(t(1,i),t(2,i),t(3,i), 'o', 'MarkerSize', 14, 'MarkerEdgeColor', 'red');
+            plot3(t(1,i-1),t(2,i-1),t(3,i-1), 'o', 'MarkerSize', 12, 'MarkerEdgeColor', 'red') ;
+            plot3(t(1,i-2),t(2,i-2),t(3,i-2), 'o', 'MarkerSize', 10, 'MarkerEdgeColor', 'red') ;
+            plot3(t(1,i-3),t(2,i-3),t(3,i-3), 'o', 'MarkerSize', 8, 'MarkerEdgeColor', 'red') ;
+            plot3(t(1,i-4),t(2,i-4),t(3,i-4), 'o', 'MarkerSize', 6, 'MarkerEdgeColor', 'red') ;
+            plot3(t(1,i-5),t(2,i-5),t(3,i-5), 'o', 'MarkerSize', 5, 'MarkerEdgeColor', 'red') ;
+            plot3(t(1,i-6),t(2,i-6),t(3,i-6), 'o', 'MarkerSize', 4, 'MarkerEdgeColor', 'red') ;
+            plot3(t(1,i-7),t(2,i-7),t(3,i-7), 'o', 'MarkerSize', 3, 'MarkerEdgeColor', 'red') ;
+            plot3(t(1,i-8),t(2,i-8),t(3,i-8), 'o', 'MarkerSize', 2, 'MarkerEdgeColor', 'red') ;
+            plot3(t(1,i-9),t(2,i-9),t(3,i-9), 'o', 'MarkerSize', 1, 'MarkerEdgeColor', 'red') ;
+            hold off;
+            
+            set(gca,'XLim',[-axislim axislim],'YLim',[-axislim axislim],'ZLim',[-axislim axislim])
+            drawnow
+%             pause(0.1)
+            clf
+        end
     end
 
     %a=t(i,1);
