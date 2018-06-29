@@ -60,7 +60,7 @@ end
 % Same as above but without the explicit computation of the mean and stdev:
 %x=normalize(x,2);
 %t=normalize(t,2);
-x(2:3,:)=0;
+x(6:7,:)=0;
 
 % Given the input, predict the output using LSTM.
 tic
