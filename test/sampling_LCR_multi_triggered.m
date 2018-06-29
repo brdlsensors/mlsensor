@@ -1,7 +1,7 @@
 
 %% LCR Meter Reader
 clear; clc
-rng(2343)
+rng(363)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
 % Find a VISA-USB object.
@@ -122,6 +122,9 @@ fclose(dev);
 fclose(dev_mult);
 
 
+
+
+
 inp=inp2;
 freq=20;% sampling frequency of data [hz]
 inptime=1;%sec%based on arduino
@@ -141,7 +144,14 @@ out=[out(1,:);out]; % Duplicate first row of the out matrix.
 pos=pos(:,1:tIntervals,:);
 pos=[pos(:,1,:) pos];
 pos=double(pos);
-
+ for i=1:length(pos)
+     
+     if pos(2,i,2)>-20
+         pl_hold= pos(:,i,2);
+          pos(:,i,2)= pos(:,i,1);
+          pos(:,i,1)=pl_hold;
+     end
+ end
 for i=1:6 % 6 total RX pairs of the LCR.
     [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline'); % interpolate the outp signal. 'spline' has some vibration at the start/beginning of signal.
 end
