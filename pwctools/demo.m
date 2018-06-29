@@ -1,8 +1,8 @@
 % Load DNA copy-number data
-clear all;
-y = load('dnagwas.txt');
-N = length(y);
-L = 10;
+% clear all;
+% y = load('dnagwas.txt');
+ N = length(y);
+ L = 10;
 x = zeros(N,L);
 
 % Iterated median filter

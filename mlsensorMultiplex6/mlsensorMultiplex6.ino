@@ -27,9 +27,11 @@ void setup() {
   TCCR1B = 0;
   TCNT1  = 0;
 
-  OCR1A = 625;            // compare match register 16MHz/256/2Hz
+  OCR1A = 625;//625; //312 for 200hz           // compare match register 16MHz/256/2Hz
+  // OCR1A = 4999;            // for 50 Hz - used with prescaler 8
   TCCR1B |= (1 << WGM12);   // CTC mode
   TCCR1B |= (1 << CS12);    // 256 prescaler 
+ //   TCCR1B |= (1 << CS11);    // 8 prescaler 
   TIMSK1 |= (1 << OCIE1A);  // enable timer compare interrupt
   interrupts();   
 }

@@ -75,7 +75,7 @@ YTest = t(:,divi+1:end);
 
 
 %% Parameters for LSTM.
-numHiddenUnits = 50;
+numHiddenUnits = 150;
 % Computational capability/complexity of the network. 30 is picked via trial and
 % error. As small as possible to prevent overfitting. Want the smallest
 % layer that can predict position AND contact. Should also be able to
@@ -83,7 +83,8 @@ numHiddenUnits = 50;
 
 layers = [ ...
     sequenceInputLayer(inputSize)
-    dropoutLayer(0.5) %dropout should prevent overfitting and make predicitons more robust to noise
+    %clippedReluLayer(10)
+    dropoutLayer(0.2) %dropout should prevent overfitting and make predicitons more robust to noise
     lstmLayer(numHiddenUnits)%,'OutputMode','last'
     fullyConnectedLayer(numResponses)
     regressionLayer];
@@ -93,9 +94,9 @@ opts = trainingOptions('adam', ...
     'MaxEpochs',500, ... % number of training iterations.
     'MiniBatchSize', 512,... %%%512
     'GradientThreshold',1, ...
-    'InitialLearnRate',0.005*2, ...
+    'InitialLearnRate',0.005*1, ...
     'LearnRateSchedule','piecewise', ...
-    'LearnRateDropPeriod',125*5, ...%%changed
+    'LearnRateDropPeriod',125*1, ...%%changed
     'LearnRateDropFactor',0.2/1, ...%%
     'Verbose',0, ...
     'Plots','training-progress', 'ExecutionEnvironment', 'gpu');

@@ -51,7 +51,7 @@ end
 
 %x=normalize(x,2);
 %t=normalize(t,2);
-%x(4:5,:)=0;
+x(2:3,:)=0;
 tic
 [net,YPred_o ]= predictAndUpdateState(net,x);
 toc
