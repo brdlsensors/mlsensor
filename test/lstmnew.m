@@ -15,7 +15,7 @@ siz=siz/sfreq;
 
 %outpf(:,2:3)=rand(47200,2);
 
-% pressure values (inpf) and sensor values (outpf).
+% combining pressure values (inpf) and sensor values (outpf).
 x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
 %x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 %x=[outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';

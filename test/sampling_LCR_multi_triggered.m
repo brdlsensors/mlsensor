@@ -32,7 +32,7 @@ query(obj1, ':DISPlay:ENABle 0');%disable display
 
 disp('LCR Connected.');
 
-%% Optitrack.
+%% Network parameters for Optitrack.
 natnetclient = natnet;
 
 % connect the client to the server (multicast over local loopback) -
@@ -138,7 +138,7 @@ pos=[pos(:,1,:) pos];
 pos=double(pos);
 
 for i=1:6 % 6 total RX pairs of the LCR.
-    [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline'); % interpolate the outp signal. spline has some vibration at the start/beginning of signal.
+    [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline'); % interpolate the outp signal. 'spline' has some vibration at the start/beginning of signal.
 end
 for i=1:2 % 2 markers.
     for j=1:3 % 3 coordinates xyz per marker.
