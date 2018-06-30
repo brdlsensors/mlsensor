@@ -172,7 +172,7 @@ for i = 1:timeStepEnd
             plot3(tn(1,i-9),tn(2,i-9),tn(3,i-9), 'o', 'MarkerSize', 1, 'MarkerEdgeColor', 'red') ;
             hold off;
             
-            set(gca,'XLim',[-axislim axislim],'YLim',[-axislim axislim],'ZLim',[-axislim axislim])
+            set(gca,'XLim',[-axislim axislim],'YLim',[-axislim-100 axislim-100],'ZLim',[-axislim axislim])
             drawnow
             %             pause(0.1)
            

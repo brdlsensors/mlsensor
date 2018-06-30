@@ -75,7 +75,7 @@ YTest = t(:,divi+1:end);
 
 
 %% Parameters for LSTM.
-numHiddenUnits = 150;
+numHiddenUnits = 50;
 % Computational capability/complexity of the network. 30 is picked via trial and
 % error. As small as possible to prevent overfitting. Want the smallest
 % layer that can predict position AND contact. Should also be able to
