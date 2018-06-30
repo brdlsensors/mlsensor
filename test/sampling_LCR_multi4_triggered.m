@@ -152,7 +152,7 @@ pos=double(pos);
           pos(:,i,1)=pl_hold;
      end
  end
-for i=1:6 % 6 total RX pairs of the LCR.
+for i=1:8 % 6 total RX pairs of the LCR.
     [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline'); % interpolate the outp signal. 'spline' has some vibration at the start/beginning of signal.
 end
 for i=1:2 % 2 markers.

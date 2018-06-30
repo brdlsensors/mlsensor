@@ -93,6 +93,11 @@ for i = 1:timeStepEnd
         
         out(i,1,count) = str2double(splt(1)); % LCR 1
         out(i,2,count) = str2double(splt(2)); % LCR 2
+%%%%%%%%%%%%%%%NEW 
+            if abs ( out(i,1,count))>100000
+                out(i,1,count)=out(i,1,count-1);
+                out(i,2,count)=out(i,1,count-1);
+            end
     end
     data_opti = natnetclient.getFrame;
     
@@ -118,6 +123,7 @@ for i = 1:timeStepEnd
             % [tempval,yt]=resample(outr(i-1:i,k),t(i-1:i,1),10,'linear');
             % Linear interpolation. to interpolate the data 10 Hz.
             outp(1,k)=outr(i-1,k)+(outr(i,k)-outr(i-1,k))*0.1/(t(i)-t(i-1));
+
         end
         % inplstm=[inp,out(1:i,rx),outpf(1:i-1,rx)]';
         inplstm=[inp,outp(1,:)]'; % only need to train on the current instance in time.
