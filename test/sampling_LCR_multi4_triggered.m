@@ -82,8 +82,12 @@ i=1
 tic
 for i = 1:timeStepEnd
     % Get current time
-    for count=1:4
+    
+    for count=1:3
         fprintf(dev_mult,'%d/n' ,count);
+        if i<2
+            pause(0.05)
+        end
         if 1 == count
             data_opti = natnetclient.getFrame;
             for j = 1:2
@@ -93,7 +97,10 @@ for i = 1:timeStepEnd
             end
         end
         data = query(obj1, ':FETCh:IMPedance:FORMatted?');
-        
+        if count==3
+            
+            forc(i)=fscanf(dev_mult,'%i');
+        end
         splt = strsplit(data,',');
         
         out(i,1,count) = str2double(splt(1)); % LCR channel 1
@@ -140,19 +147,20 @@ t=[0;t]; % Assume that t=0 is when the input starts (this might not be true beca
 
 % Take the starting value and use it as the value at t = 0.
 out=out(1:tIntervals,:); % Take the first tIntervals of the out matrix and merge from 3d matrix to 2d matrix (collapse a dimension using test(n,:))
+out=[out forc];
 out=[out(1,:);out]; % Duplicate first row of the out matrix.
 pos=pos(:,1:tIntervals,:);
 pos=[pos(:,1,:) pos];
 pos=double(pos);
- for i=1:length(pos)
-     
-     if pos(2,i,2)>-20
-         pl_hold= pos(:,i,2);
-          pos(:,i,2)= pos(:,i,1);
-          pos(:,i,1)=pl_hold;
-     end
- end
-for i=1:8 % 6 total RX pairs of the LCR.
+for i=1:length(pos)
+    
+    if pos(2,i,2)>-20
+        pl_hold= pos(:,i,2);
+        pos(:,i,2)= pos(:,i,1);
+        pos(:,i,1)=pl_hold;
+    end
+end
+for i=1:7 % 6 total RX pairs of the LCR.
     [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline'); % interpolate the outp signal. 'spline' has some vibration at the start/beginning of signal.
 end
 for i=1:2 % 2 markers.
