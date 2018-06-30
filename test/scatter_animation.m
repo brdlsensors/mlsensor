@@ -44,9 +44,9 @@ for i = 10:length(YPred_o(1,:))
     plot3(x2(i-8),y2(i-8),z2(i-8), 'o', 'MarkerSize', 2, 'MarkerEdgeColor', 'red') ;
     plot3(x2(i-9),y2(i-9),z2(i-9), 'o', 'MarkerSize', 1, 'MarkerEdgeColor', 'red') ;
     hold off;
-    
+     
     set(gca,'XLim',[-axislim axislim],'YLim',[-axislim axislim],'ZLim',[-axislim axislim])
     drawnow
-    pause(0.1)
+%     pause(0.1)
     clf
 end
