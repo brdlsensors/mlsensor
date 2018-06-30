@@ -82,7 +82,7 @@ i=1
 tic
 for i = 1:timeStepEnd
     % Get current time
-    for count=1:3
+    for count=1:4
         fprintf(dev_mult,'%d/n' ,count);
         if 1 == count
             data_opti = natnetclient.getFrame;
