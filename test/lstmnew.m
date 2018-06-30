@@ -84,7 +84,7 @@ numHiddenUnits = 150;
 layers = [ ...
     sequenceInputLayer(inputSize)
     %clippedReluLayer(10)
-    dropoutLayer(0.2) %dropout should prevent overfitting and make predicitons more robust to noise
+    dropoutLayer(0) %dropout should prevent overfitting and make predicitons more robust to noise
     lstmLayer(numHiddenUnits)%,'OutputMode','last'
     fullyConnectedLayer(numResponses)
     regressionLayer];

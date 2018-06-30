@@ -1,7 +1,7 @@
 
 %% LCR Meter Reader
 clear; clc
-rng(363)
+rng(49494)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
 % Find a VISA-USB object.
@@ -162,3 +162,8 @@ for i=1:2 % 2 markers.
 end
 % stp=floor(length(yt)/(inps*inptime*freq));
 % inp=repmat(inp,stp,1);
+for i=1:length(out)
+    if out (i,1)>100000
+        out (i,1:2)=out (i-1,1:2);
+    end
+end

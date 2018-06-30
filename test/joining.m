@@ -11,8 +11,8 @@ if exist('a1','var') == 0
     %outp=outp-outp(1,:);
     % outp=normalize(outp,2);
     
-    outp=outp-mean(outp(10:100,:));
-    outp=outp./range(outp(10:100,:));
+%     outp=outp-mean(outp(10:100,:));
+%     outp=outp./range(outp(10:100,:));
     %
     inp=inp(1:siz,1);
     outp=outp(1:siz,:);
@@ -29,9 +29,9 @@ else
     %outp=outp-outp(1,:);
     %  outp=normalize(outp,2);
     %
-    outp=outp-mean(outp(10:100,:));
-    outp=outp./range(outp(10:100,:));
-    
+%     outp=outp-mean(outp(10:100,:));
+%     outp=outp./range(outp(10:100,:));
+%     
     inp=inp(1:siz,1);
     outp=outp(1:siz,:);
     posp=posp(:,1:siz,:);
