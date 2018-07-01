@@ -1,7 +1,7 @@
 
 %% LCR Meter Reader
 clear; clc
-rng(56494)
+rng(900)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
 % Find a VISA-USB object.
@@ -89,6 +89,7 @@ for i = 1:timeStepEnd
             pause(0.05)
         end
         if 1 == count
+            pause(0.01)
             data_opti = natnetclient.getFrame;
             for j = 1:2
                 pos(1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
@@ -147,7 +148,7 @@ t=[0;t]; % Assume that t=0 is when the input starts (this might not be true beca
 
 % Take the starting value and use it as the value at t = 0.
 out=out(1:tIntervals,:); % Take the first tIntervals of the out matrix and merge from 3d matrix to 2d matrix (collapse a dimension using test(n,:))
-out=[out forc];
+out=[out forc'];
 out=[out(1,:);out]; % Duplicate first row of the out matrix.
 pos=pos(:,1:tIntervals,:);
 pos=[pos(:,1,:) pos];
