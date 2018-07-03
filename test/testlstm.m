@@ -60,7 +60,8 @@ end
 % Same as above but without the explicit computation of the mean and stdev:
 %x=normalize(x,2);
 %t=normalize(t,2);
-x(6:7,:)=0;
+%x([2:3 6:7],:)=0;
+x([2:end],:)=0;
 
 % Given the input, predict the output using LSTM.
 tic
@@ -74,14 +75,27 @@ for z=1:numResponses
     t(z,:)= t(z,:)*ts(z); % missing the mean?
     YPred_o(z,:)=YPred_o(z,:)*ts(z); % missing the mean?
 end
+
+%subplot(3,1,1)
 plot(YPred_o(1,:))
 hold on
 plot(t(1,:))
 
+% subplot(3,1,2)
+% plot(YPred_o(2,:))
+% hold on
+% %plot(t(2,:))
+% 
+% subplot(3,1,3)
+% plot(YPred_o(3,:))
+% hold on
+% %plot(t(3,:))
+
+
 % Error. 
 err=rssq(YPred_o-t);
 %err(err>50)=0;
-mean(err)
+mean(err(1:5000))
 M = movmean(err,100);
 diffx=diff(t(1,:));
 for i=1:length(err)-1
@@ -91,11 +105,11 @@ for i=1:length(err)-1
         errd(i)=-err(i);
     end
 end
-figure;
-histogram(errd)
+% figure;
+% histogram(errd)
 
 % Plotting.
-figure;
-scatter3(t(1,:),t(2,:),t(3,:))
-hold on
-scatter3(YPred_o(1,:),YPred_o(2,:),YPred_o(3,:))
+% figure;
+% scatter3(t(1,:),t(2,:),t(3,:))
+% hold on
+% scatter3(YPred_o(1,:),YPred_o(2,:),YPred_o(3,:))

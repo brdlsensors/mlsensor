@@ -4,7 +4,7 @@ clear out
 clear t
 clear outp
 clear pos
-rng(3536)
+rng(383)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
 axislim=120;
@@ -93,11 +93,11 @@ for i = 1:timeStepEnd
         
         out(i,1,count) = str2double(splt(1)); % LCR 1
         out(i,2,count) = str2double(splt(2)); % LCR 2
-%%%%%%%%%%%%%%%NEW 
-            if abs ( out(i,1,count))>100000
-                out(i,1,count)=out(i,1,count-1);
-                out(i,2,count)=out(i,1,count-1);
-            end
+        %%%%%%%%%%%%%%%NEW
+        if abs ( out(i,1,count))>100000
+            out(i,1,count)=out(i-1,1,count);
+            out(i,2,count)=out(i-1,2,count);
+        end
     end
     data_opti = natnetclient.getFrame;
     
@@ -123,7 +123,7 @@ for i = 1:timeStepEnd
             % [tempval,yt]=resample(outr(i-1:i,k),t(i-1:i,1),10,'linear');
             % Linear interpolation. to interpolate the data 10 Hz.
             outp(1,k)=outr(i-1,k)+(outr(i,k)-outr(i-1,k))*0.1/(t(i)-t(i-1));
-
+            
         end
         % inplstm=[inp,out(1:i,rx),outpf(1:i-1,rx)]';
         inplstm=[inp,outp(1,:)]'; % only need to train on the current instance in time.
@@ -141,12 +141,12 @@ for i = 1:timeStepEnd
         
         % Plotting.
         %  scatter(YPred_o(1,i),YPred_o(2,i))
-%                 plot(YPred_o(2,1:i),'b')
-%                 drawnow()
-%                 hold on
-%                 plot(squeeze(pos(2,1:i,2))-squeeze(pos(2,1:i,1)),'r') % *position COULD be off slightly because it's not being interpolated upon.
-%         
-         clf
+        %                 plot(YPred_o(2,1:i),'b')
+        %                 drawnow()
+        %                 hold on
+        %                 plot(squeeze(pos(2,1:i,2))-squeeze(pos(2,1:i,1)),'r') % *position COULD be off slightly because it's not being interpolated upon.
+        %
+        clf
         tn(:,i)=squeeze(pos(:,i,2))-squeeze(pos(:,i,1));
         if i > 10
             hold on;
@@ -181,7 +181,7 @@ for i = 1:timeStepEnd
             set(gca,'XLim',[-axislim axislim],'YLim',[-axislim-100 axislim-100],'ZLim',[-axislim axislim])
             drawnow
             %             pause(0.1)
-           
+            
         end
         
         

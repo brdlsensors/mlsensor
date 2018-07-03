@@ -151,7 +151,7 @@ for i = 1:timeStepEnd
         plot(YPred_o(4,1:i),'b')
                   drawnow()
                 hold on
-                plot(forc(1,1:i),'r')
+            %    plot(forc(1,1:i),'r')
 %                 plot(squeeze(pos(1,1:i,2))-squeeze(pos(1,1:i,1)),'r') % *position COULD be off slightly because it's not being interpolated upon.
 %         
      %    clf
