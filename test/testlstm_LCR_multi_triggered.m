@@ -141,10 +141,10 @@ for i = 1:timeStepEnd
         
         % Plotting.
         %  scatter(YPred_o(1,i),YPred_o(2,i))
-        %                 plot(YPred_o(2,1:i),'b')
+                         plot(YPred_o(1,1:i),'b')
         %                 drawnow()
-        %                 hold on
-        %                 plot(squeeze(pos(2,1:i,2))-squeeze(pos(2,1:i,1)),'r') % *position COULD be off slightly because it's not being interpolated upon.
+                         hold on
+                         plot(squeeze(pos(1,1:i,2))-squeeze(pos(1,1:i,1)),'r') % *position COULD be off slightly because it's not being interpolated upon.
         %
         clf
         tn(:,i)=squeeze(pos(:,i,2))-squeeze(pos(:,i,1));

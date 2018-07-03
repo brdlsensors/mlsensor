@@ -1,6 +1,6 @@
 
 sfreq=2; % downsampling frequency.
-lag=10;% cut off the beginning part.
+lag=100;% cut off the beginning part.
 siz=length(outp)/1-lag-100; % size of posp (position matrix)..
 rx=[1:6]; % which RX pairs of the LCR to use.
 
@@ -14,9 +14,9 @@ pospf=posp(:,1:sfreq:end,:);
 siz=siz/sfreq;
 
 %outpf(:,2:3)=rand(47200,2);
-
+offset=0;
 % combining pressure values (inpf) and sensor values (outpf).
-x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx)]';
+x=[inpf(3+lag+offset:siz+2+offset,1),outpf(3+lag+offset:siz+2+offset,rx)]';
 %x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 %x=[outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 %x=[outpf(3+lag:siz+2,rx)]';
@@ -85,14 +85,14 @@ numHiddenUnits = 50;
 layers = [ ...
     sequenceInputLayer(inputSize)
     %clippedReluLayer(10)
-    dropoutLayer(0.5) %dropout should prevent overfitting and make predicitons more robust to noise
+    dropoutLayer(0) %dropout should prevent overfitting and make predicitons more robust to noise
     lstmLayer(numHiddenUnits)%,'OutputMode','last'
     fullyConnectedLayer(numResponses)
     regressionLayer];
 %bilstmLayer
 
 opts = trainingOptions('adam', ...
-    'MaxEpochs',500, ... % number of training iterations.
+    'MaxEpochs',100, ... % number of training iterations.
     'MiniBatchSize', 512,... %%%512
     'GradientThreshold',1, ...
     'InitialLearnRate',0.005*1, ...
