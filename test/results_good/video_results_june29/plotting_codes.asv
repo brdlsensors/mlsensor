@@ -1,9 +1,0 @@
-%run('processing_pos.m')
-
-test_per=length(pos);
-pos_ref=squeeze(pos(:,:,2))-squeeze(pos(:,:,1));
-pos_pred=YPred_o(:,1:test_per);
-
-err=rssq(pos_pred-pos_ref);
-mean(e)
-plot(err)
