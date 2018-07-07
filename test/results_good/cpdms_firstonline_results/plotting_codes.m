@@ -40,10 +40,10 @@ plot(pos_ref(3,:))
 % plot(YPred_o(end,1:i))
 % 
 % 
-% plot(YPred_o(1,1:i),'b')
-% %                 drawnow()
-% hold on
-% plot(squeeze(pos(1,1:i,2))-squeeze(pos(1,1:i,1)),'r') % *position COULD be off slightly because it's not being interpolated upon.
+plot(YPred_o(1,1:i),'b')
+%                 drawnow()
+hold on
+plot(squeeze(pos(1,1:i,2))-squeeze(pos(1,1:i,1)),'r') % *position COULD be off slightly because it's not being interpolated upon.
 % 
 % 
 % [a,ind]=max(pos_ref(3,:));
