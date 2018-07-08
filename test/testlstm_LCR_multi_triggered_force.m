@@ -7,7 +7,7 @@ clear pos
 rng(37906)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
-axislim=120;
+axislim=70;
 % Find a VISA-USB object.
 obj1 = instrfind('Type', 'visa-usb', 'RsrcName', 'USB0::0x0957::0x0909::MY54202935::0::INSTR', 'Tag', '');
 
@@ -101,8 +101,8 @@ for i = 1:timeStepEnd
         out(i,2,count) = str2double(splt(2)); % LCR 2
 %%%%%%%%%%%%%%%NEW 
             if abs ( out(i,1,count))>100000
-                out(i,1,count)=out(i-1,1,count);
-                out(i,2,count)=out(i-1,2,count);
+                out(i,1,count)=xm(count*2);
+                out(i,2,count)=xm(count*2+1);
             end
     end
     data_opti = natnetclient.getFrame;
@@ -148,12 +148,19 @@ for i = 1:timeStepEnd
         
         % Plotting.
          % scatter(YPred_o(1,i),YPred_o(2,i))
-        plot(YPred_o(4,1:i),'b')
+        plot(YPred_o(4,2:i),'b','LineWidth',2)
                   drawnow()
                 hold on
-            %    plot(forc(1,1:i),'r')
-%                 plot(squeeze(pos(1,1:i,2))-squeeze(pos(1,1:i,1)),'r') % *position COULD be off slightly because it's not being interpolated upon.
-%         
+                plot(forc(1,2:i),'r','LineWidth',2)
+                legend('Predicted Force','Actual Force')
+%                 if i==2
+%                     net= resetState(net)
+%                 end
+%                plot(YPred_o(3,1:i),'b')
+%                   drawnow()
+%                 hold on 
+%                 plot(squeeze(pos(3,1:i,1))-squeeze(pos(3,1:i,2)),'r') % *position COULD be off slightly because it's not being interpolated upon.
+% %         
      %    clf
         tn(:,i)=squeeze(pos(:,i,2))-squeeze(pos(:,i,1));
         if i > 10000
@@ -251,3 +258,9 @@ for i=1:2
 end
 % stp=floor(length(yt)/(inps*inptime*freq));
 % inp=repmat(inp,stp,1);
+
+               plot(YPred_o(3,1:i),'b')
+                  drawnow()
+                hold on 
+                plot(squeeze(pos(3,1:i,1))-squeeze(pos(3,1:i,2)),'r') % *position COULD be off slightly because it's not being interpolated upon.
+%   

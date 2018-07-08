@@ -1,7 +1,7 @@
 
 %% LCR Meter Reader
 clear; clc
-rng(900)
+rng(435386)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
 % Find a VISA-USB object.
@@ -153,14 +153,23 @@ out=[out(1,:);out]; % Duplicate first row of the out matrix.
 pos=pos(:,1:tIntervals,:);
 pos=[pos(:,1,:) pos];
 pos=double(pos);
-for i=1:length(pos)
-    
-    if pos(2,i,2)>-20
-        pl_hold= pos(:,i,2);
-        pos(:,i,2)= pos(:,i,1);
-        pos(:,i,1)=pl_hold;
-    end
-end
+% for i=1:length(pos)
+%     
+%     if pos(3,i,1)>80
+% %         pl_hold= pos(:,i,2);
+% %         pos(:,i,2)= pos(:,i,1);
+% %         pos(:,i,1)=pl_hold;
+%        pos(:,i,1)=pos(:,i-1,1);
+%        pos(:,i,2)=pos(:,i-1,2);
+%     end
+%    if pos(3,i,2)>70||pos(3,i,2)<50
+% %         pl_hold= pos(:,i,2);
+% %         pos(:,i,2)= pos(:,i,1);
+% %         pos(:,i,1)=pl_hold;
+%        pos(:,i,1)=pos(:,i-1,1);
+%        pos(:,i,2)=pos(:,i-1,2);
+%     end
+% end
 for i=1:7 % 6 total RX pairs of the LCR.
     [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline'); % interpolate the outp signal. 'spline' has some vibration at the start/beginning of signal.
 end
@@ -169,8 +178,10 @@ for i=1:2 % 2 markers.
         [posp(j,:,i),yt]=resample(squeeze(pos(j,:,i)),t(:,1),freq,'spline'); % interpolate the outp signal.
     end
 end
+
 % stp=floor(length(yt)/(inps*inptime*freq));
 % inp=repmat(inp,stp,1);
+
 for i=1:length(out)
     if out (i,1)>100000
         out (i,1:2)=out (i-1,1:2);

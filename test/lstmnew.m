@@ -1,7 +1,7 @@
 
 sfreq=2; % downsampling frequency.
 lag=100;% cut off the beginning part.
-siz=length(outp)/1-lag-100; % size of posp (position matrix)..
+siz=length(outp)/1-lag-1000; % size of posp (position matrix)..
 rx=[1:6]; % which RX pairs of the LCR to use.
 
 
@@ -32,8 +32,8 @@ x=[inpf(3+lag+offset:siz+2+offset,1),outpf(3+lag+offset:siz+2+offset,rx)]';
 %t=rssq(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
 % subtracting second marker from the first in order to determine the
 % relative positioning.
-t=[(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1))) ];
-%t=[(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1))) ;outpf(3+lag:siz+2,7)' ];
+%t=[(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1))) ];
+t=[(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1))) ;outpf(3+lag:siz+2,7)' ];
 %t=[inpf(2+lag:siz+1,1)]';
 
 %% Build training and testing sets.
@@ -76,7 +76,7 @@ YTest = t(:,divi+1:end);
 
 
 %% Parameters for LSTM.
-numHiddenUnits = 50;
+numHiddenUnits = 100;
 % Computational capability/complexity of the network. 30 is picked via trial and
 % error. As small as possible to prevent overfitting. Want the smallest
 % layer that can predict position AND contact. Should also be able to
@@ -85,14 +85,14 @@ numHiddenUnits = 50;
 layers = [ ...
     sequenceInputLayer(inputSize)
     %clippedReluLayer(10)
-    dropoutLayer(0) %dropout should prevent overfitting and make predicitons more robust to noise
+    dropoutLayer(0.5) %dropout should prevent overfitting and make predicitons more robust to noise
     lstmLayer(numHiddenUnits)%,'OutputMode','last'
     fullyConnectedLayer(numResponses)
     regressionLayer];
 %bilstmLayer
 
 opts = trainingOptions('adam', ...
-    'MaxEpochs',100, ... % number of training iterations.
+    'MaxEpochs',500, ... % number of training iterations.
     'MiniBatchSize', 512,... %%%512
     'GradientThreshold',1, ...
     'InitialLearnRate',0.005*1, ...
@@ -116,9 +116,13 @@ for z=1:numResponses
 end
 
 % Plotting.
-plot(YPred_o(1,:),'r')
+plot(YPred_o(3,:),'r')
 hold on
-plot(t(1,:),'b')
+plot(t(3,:),'b')
+figure;
+plot(YPred_o(4,:),'r')
+hold on
+plot(t(4,:),'b')
 
 % Error. 
 err=rssq(YPred_o(1:3,:)-t(1:3,:));

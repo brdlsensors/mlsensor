@@ -5,7 +5,7 @@
 % done, manually run the final part.
 
 if exist('a1','var') == 0
-    siz=length(outp)-100; % cut off the end.
+    siz=length(outp)/1-100; % cut off the end.
     
     %load('t3_4contcts.mat','inp','outp','posp')
     %outp=outp-outp(1,:);
@@ -47,4 +47,8 @@ if 0
     inp=a1;
     outp=b1;
     posp=c1;
+    
+          pl_hold= posp(:,:,2);
+        posp(:,:,2)= posp(:,:,1);
+       posp(:,:,1)=pl_hold;
 end

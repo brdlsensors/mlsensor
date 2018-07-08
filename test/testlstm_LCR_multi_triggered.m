@@ -95,8 +95,8 @@ for i = 1:timeStepEnd
         out(i,2,count) = str2double(splt(2)); % LCR 2
         %%%%%%%%%%%%%%%NEW
         if abs ( out(i,1,count))>100000
-            out(i,1,count)=out(i-1,1,count);
-            out(i,2,count)=out(i-1,2,count);
+                out(i,1,count)=xm(count*2);
+                out(i,2,count)=xm(count*2+1);
         end
     end
     data_opti = natnetclient.getFrame;
