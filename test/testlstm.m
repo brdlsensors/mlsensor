@@ -61,7 +61,7 @@ end
 %x=normalize(x,2);
 %t=normalize(t,2);
 %x([2:3 6:7],:)=0;
-x([2:end],:)=0;
+x([2:3],500:end)=0;
 
 % Given the input, predict the output using LSTM.
 tic
@@ -77,9 +77,9 @@ for z=1:numResponses
 end
 
 %subplot(3,1,1)
-plot(YPred_o(1,:))
+plot(YPred_o(3,:))
 hold on
-plot(t(1,:))
+plot(t(3,:))
 
 % subplot(3,1,2)
 % plot(YPred_o(2,:))

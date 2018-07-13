@@ -4,10 +4,10 @@ clear out
 clear t
 clear outp
 clear pos
-rng(383)
+rng(385683)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
-axislim=120;
+axislim=60;
 % Find a VISA-USB object.
 obj1 = instrfind('Type', 'visa-usb', 'RsrcName', 'USB0::0x0957::0x0909::MY54202935::0::INSTR', 'Tag', '');
 
@@ -94,22 +94,17 @@ for i = 1:timeStepEnd
         out(i,1,count) = str2double(splt(1)); % LCR 1
         out(i,2,count) = str2double(splt(2)); % LCR 2
         %%%%%%%%%%%%%%%NEW
-        if abs ( out(i,1,count))>100000
-                out(i,1,count)=xm(count*2);
-                out(i,2,count)=xm(count*2+1);
+        if abs ( out(i,1,count))>20000 %5000 for cpdms
+            out(i,1,count)=xm(count*2);
+            out(i,2,count)=xm(count*2+1);
         end
     end
-    data_opti = natnetclient.getFrame;
+    
     
     %%%%%%%%%%%%%%%%
     % Optional if you don't want/have the optitrack. (any and other parts
     % with data_opti).
-    for j = 1:2
-        %fprintf( 'Name:"%s"  ', model.RigidBody( 1 ).Name )
-        pos(1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
-        pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
-        pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
-    end
+    
     %%%%%%%%%%%%%%%
     
     t(i,1) = toc;
@@ -138,51 +133,48 @@ for i = 1:timeStepEnd
         YPred_o(1,i)=YPred_o(1,i)*ts(1)+tm(1);
         YPred_o(2,i)=YPred_o(2,i)*ts(2)+tm(2);
         YPred_o(3,i)=YPred_o(3,i)*ts(3)+tm(3);
-        
+        YPred_o(:,i)=-YPred_o(:,i);
         % Plotting.
-        %  scatter(YPred_o(1,i),YPred_o(2,i))
-                         plot(YPred_o(1,1:i),'b')
-        %                 drawnow()
-                         hold on
-                         plot(squeeze(pos(1,1:i,2))-squeeze(pos(1,1:i,1)),'r') % *position COULD be off slightly because it's not being interpolated upon.
+        %scatter(YPred_o(1,i),YPred_o(2,i))
+        plot(YPred_o(3,1:i),'b','LineWidth',2)
+        drawnow()
+        hold on
+%         data_opti = natnetclient.getFrame;
+%         for j = 1:2
+%             %fprintf( 'Name:"%s"  ', model.RigidBody( 1 ).Name )
+%             pos(1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
+%             pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
+%             pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
+%         end
+%        plot(squeeze(pos(3,1:i,2))-squeeze(pos(3,1:i,1)),'r','LineWidth',2) % *position COULD be off slightly because it's not being interpolated upon.
         %
-        clf
-        tn(:,i)=squeeze(pos(:,i,2))-squeeze(pos(:,i,1));
-        if i > 10
-            hold on;
-            view(0,90);
-            grid on;
-            
-            % predicted
-            plot3(YPred_o(1,i),YPred_o(2,i),YPred_o(3,i), 'o', 'MarkerSize', 14, 'MarkerEdgeColor', 'blue');
-            plot3(YPred_o(1,i-1),YPred_o(2,i-1),YPred_o(3,i-1), 'o', 'MarkerSize', 12, 'MarkerEdgeColor', 'blue') ;
-            plot3(YPred_o(1,i-2),YPred_o(2,i-2),YPred_o(3,i-2), 'o', 'MarkerSize', 10, 'MarkerEdgeColor', 'blue') ;
-            plot3(YPred_o(1,i-3),YPred_o(2,i-3),YPred_o(3,i-3), 'o', 'MarkerSize', 8, 'MarkerEdgeColor', 'blue') ;
-            plot3(YPred_o(1,i-4),YPred_o(2,i-4),YPred_o(3,i-4), 'o', 'MarkerSize', 6, 'MarkerEdgeColor', 'blue') ;
-            plot3(YPred_o(1,i-5),YPred_o(2,i-5),YPred_o(3,i-5), 'o', 'MarkerSize', 5, 'MarkerEdgeColor', 'blue') ;
-            plot3(YPred_o(1,i-6),YPred_o(2,i-6),YPred_o(3,i-6), 'o', 'MarkerSize', 4, 'MarkerEdgeColor', 'blue') ;
-            plot3(YPred_o(1,i-7),YPred_o(2,i-7),YPred_o(3,i-7), 'o', 'MarkerSize', 3, 'MarkerEdgeColor', 'blue') ;
-            plot3(YPred_o(1,i-8),YPred_o(2,i-8),YPred_o(3,i-8), 'o', 'MarkerSize', 2, 'MarkerEdgeColor', 'blue') ;
-            plot3(YPred_o(1,i-9),YPred_o(2,i-9),YPred_o(3,i-9), 'o', 'MarkerSize', 1, 'MarkerEdgeColor', 'blue') ;
-            
-            % actual
-            plot3(tn(1,i),tn(2,i),tn(3,i), 'o', 'MarkerSize', 14, 'MarkerEdgeColor', 'red');
-            plot3(tn(1,i-1),tn(2,i-1),tn(3,i-1), 'o', 'MarkerSize', 12, 'MarkerEdgeColor', 'red') ;
-            plot3(tn(1,i-2),tn(2,i-2),tn(3,i-2), 'o', 'MarkerSize', 10, 'MarkerEdgeColor', 'red') ;
-            plot3(tn(1,i-3),tn(2,i-3),tn(3,i-3), 'o', 'MarkerSize', 8, 'MarkerEdgeColor', 'red') ;
-            plot3(tn(1,i-4),tn(2,i-4),tn(3,i-4), 'o', 'MarkerSize', 6, 'MarkerEdgeColor', 'red') ;
-            plot3(tn(1,i-5),tn(2,i-5),tn(3,i-5), 'o', 'MarkerSize', 5, 'MarkerEdgeColor', 'red') ;
-            plot3(tn(1,i-6),tn(2,i-6),tn(3,i-6), 'o', 'MarkerSize', 4, 'MarkerEdgeColor', 'red') ;
-            plot3(tn(1,i-7),tn(2,i-7),tn(3,i-7), 'o', 'MarkerSize', 3, 'MarkerEdgeColor', 'red') ;
-            plot3(tn(1,i-8),tn(2,i-8),tn(3,i-8), 'o', 'MarkerSize', 2, 'MarkerEdgeColor', 'red') ;
-            plot3(tn(1,i-9),tn(2,i-9),tn(3,i-9), 'o', 'MarkerSize', 1, 'MarkerEdgeColor', 'red') ;
-            hold off;
-            
-            set(gca,'XLim',[-axislim axislim],'YLim',[-axislim-100 axislim-100],'ZLim',[-axislim axislim])
-            drawnow
-            %             pause(0.1)
-            
+        if mod(i,300)==0
+         clf
         end
+        %  tn(:,i)=(squeeze(pos(:,i,2))-squeeze(pos(:,i,1)));
+        
+        %         if i > 10
+        %             hold on;
+        %            %view([0,0,1])
+        %
+        %             grid on;
+        %
+        %             % predicted
+        %             for kkk=0:6
+        %                 plot(YPred_o(1,i-kkk),YPred_o(3,i-kkk), 'o', 'MarkerSize', 2*(14-2*kkk), 'MarkerEdgeColor', 'blue','LineWidth',2);
+        %                 plot(tn(1,i-kkk),tn(3,i-kkk), 'o', 'MarkerSize', 2*(14-2*kkk), 'MarkerEdgeColor', 'red','LineWidth',2);
+        %
+        %             end
+        %
+        %             hold off;
+        %
+        %         %    set(gca,'XLim',[-5 5],'YLim',[-125 -75],'ZLim',[-70 50])
+        %              set(gca,'XLim',[-25 25],'YLim',[-60 0])
+        %             camroll(-90)
+        %             drawnow
+        %             %             pause(0.1)
+        %
+        %         end
         
         
         
@@ -241,3 +233,29 @@ for i=1:2
 end
 % stp=floor(length(yt)/(inps*inptime*freq));
 % inp=repmat(inp,stp,1);
+
+
+
+
+plot3(YPred_o(1,i),YPred_o(2,i),YPred_o(3,i), 'o', 'MarkerSize', 14, 'MarkerEdgeColor', 'blue');
+plot3(YPred_o(1,i-1),YPred_o(2,i-1),YPred_o(3,i-1), 'o', 'MarkerSize', 12, 'MarkerEdgeColor', 'blue') ;
+plot3(YPred_o(1,i-2),YPred_o(2,i-2),YPred_o(3,i-2), 'o', 'MarkerSize', 10, 'MarkerEdgeColor', 'blue') ;
+plot3(YPred_o(1,i-3),YPred_o(2,i-3),YPred_o(3,i-3), 'o', 'MarkerSize', 8, 'MarkerEdgeColor', 'blue') ;
+plot3(YPred_o(1,i-4),YPred_o(2,i-4),YPred_o(3,i-4), 'o', 'MarkerSize', 6, 'MarkerEdgeColor', 'blue') ;
+plot3(YPred_o(1,i-5),YPred_o(2,i-5),YPred_o(3,i-5), 'o', 'MarkerSize', 5, 'MarkerEdgeColor', 'blue') ;
+plot3(YPred_o(1,i-6),YPred_o(2,i-6),YPred_o(3,i-6), 'o', 'MarkerSize', 4, 'MarkerEdgeColor', 'blue') ;
+plot3(YPred_o(1,i-7),YPred_o(2,i-7),YPred_o(3,i-7), 'o', 'MarkerSize', 3, 'MarkerEdgeColor', 'blue') ;
+plot3(YPred_o(1,i-8),YPred_o(2,i-8),YPred_o(3,i-8), 'o', 'MarkerSize', 2, 'MarkerEdgeColor', 'blue') ;
+plot3(YPred_o(1,i-9),YPred_o(2,i-9),YPred_o(3,i-9), 'o', 'MarkerSize', 1, 'MarkerEdgeColor', 'blue') ;
+
+% actual
+plot3(tn(1,i),tn(2,i),tn(3,i), 'o', 'MarkerSize', 14, 'MarkerEdgeColor', 'red');
+plot3(tn(1,i-1),tn(2,i-1),tn(3,i-1), 'o', 'MarkerSize', 12, 'MarkerEdgeColor', 'red') ;
+plot3(tn(1,i-2),tn(2,i-2),tn(3,i-2), 'o', 'MarkerSize', 10, 'MarkerEdgeColor', 'red') ;
+plot3(tn(1,i-3),tn(2,i-3),tn(3,i-3), 'o', 'MarkerSize', 8, 'MarkerEdgeColor', 'red') ;
+plot3(tn(1,i-4),tn(2,i-4),tn(3,i-4), 'o', 'MarkerSize', 6, 'MarkerEdgeColor', 'red') ;
+plot3(tn(1,i-5),tn(2,i-5),tn(3,i-5), 'o', 'MarkerSize', 5, 'MarkerEdgeColor', 'red') ;
+plot3(tn(1,i-6),tn(2,i-6),tn(3,i-6), 'o', 'MarkerSize', 4, 'MarkerEdgeColor', 'red') ;
+plot3(tn(1,i-7),tn(2,i-7),tn(3,i-7), 'o', 'MarkerSize', 3, 'MarkerEdgeColor', 'red') ;
+plot3(tn(1,i-8),tn(2,i-8),tn(3,i-8), 'o', 'MarkerSize', 2, 'MarkerEdgeColor', 'red') ;
+plot3(tn(1,i-9),tn(2,i-9),tn(3,i-9), 'o', 'MarkerSize', 1, 'MarkerEdgeColor', 'red') ;

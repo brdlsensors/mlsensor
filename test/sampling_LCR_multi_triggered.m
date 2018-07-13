@@ -1,7 +1,7 @@
 
 %% LCR Meter Reader
 clear; clc
-rng(56494)
+rng(78484574)
 addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
 timeStepEnd = 15000;
 % Find a VISA-USB object.
@@ -84,6 +84,7 @@ for i = 1:timeStepEnd
     % Get current time
     for count=1:3
         fprintf(dev_mult,'%d/n' ,count);
+        pause(0.01)
         if 1 == count
             data_opti = natnetclient.getFrame;
             for j = 1:2
