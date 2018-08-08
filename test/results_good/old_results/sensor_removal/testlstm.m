@@ -60,7 +60,8 @@ end
 % Same as above but without the explicit computation of the mean and stdev:
 %x=normalize(x,2);
 %t=normalize(t,2);
-x(6,:)=0;
+
+x(4:5,:)=0;
 
 % Given the input, predict the output using LSTM.
 tic
@@ -95,7 +96,7 @@ figure;
 histogram(errd)
 
 % Plotting.
-figure;
-scatter3(t(1,:),t(2,:),t(3,:))
-hold on
-scatter3(YPred_o(1,:),YPred_o(2,:),YPred_o(3,:))
+% figure;
+% scatter3(t(1,:),t(2,:),t(3,:))
+% hold on
+% scatter3(YPred_o(1,:),YPred_o(2,:),YPred_o(3,:))

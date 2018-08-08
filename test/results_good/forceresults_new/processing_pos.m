@@ -1,5 +1,6 @@
 %% Resampling pos data to 10 Hz for correct error analysis
 
+
 clear outp
 clear posp
 inp=inp2;
@@ -12,8 +13,8 @@ inp=repmat(inp,inptime*freq,1);
 inp=reshape(inp,1,[]);
 inp=inp';
 %
-asd=length(t);
-t=[0;t];
+asd=length(t)-1;
+t=[0;t(1:asd)];
 
 out=out(1:asd,:);
 out=[out(1,:);out];

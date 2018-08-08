@@ -12,8 +12,8 @@ inp=repmat(inp,inptime*freq,1);
 inp=reshape(inp,1,[]);
 inp=inp';
 %
-asd=length(t);
-t=[0;t];
+asd=length(t)-1;
+t=[0;t(1:asd)];
 
 out=out(1:asd,:);
 out=[out(1,:);out];
@@ -24,9 +24,9 @@ pos=double(pos);
 
 for i=1:6
     [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline');
-    
-    
+
 end
+
 for i=1:2
     for j=1:3
         

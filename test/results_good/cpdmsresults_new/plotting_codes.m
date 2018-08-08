@@ -2,13 +2,13 @@
 
 
 test_per=length(pos);
-for i=1:test_per
-    if pos(3,i,2)>pos(3,i,1)
-        asd= pos(:,i,2);
-        pos(:,i,2)=pos(:,i,1);
-        pos(:,i,1)=asd;
-    end
-end
+% for i=1:test_per
+%     if pos(3,i,2)>pos(3,i,1)
+%         asd= pos(:,i,2);
+%         pos(:,i,2)=pos(:,i,1);
+%         pos(:,i,1)=asd;
+%     end
+% end
 pos_ref=squeeze(pos(:,:,2))-squeeze(pos(:,:,1));
 pos_pred=YPred_o(:,1:test_per);
 
@@ -29,6 +29,11 @@ plot(pos_pred(3,:))
 hold on
 plot(pos_ref(3,:))
 
+beg=50;
+fin=650;
+plot3(beg:fin,pos_ref(3,beg:fin),pos_ref(2,beg:fin))
+hold on
+plot3(beg:fin,pos_pred(3,beg:fin),pos_pred(2,beg:fin))
 % subplot(4,1,4)
 % plot(err)
 

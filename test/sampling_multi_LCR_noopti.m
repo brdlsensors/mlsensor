@@ -33,6 +33,26 @@ query(obj1, ':DISPlay:ENABle 0');%disable display
 disp('LCR Connected.');
 
 %%
+                
+figure(1)
+ 
+% LCR 1 Plot
+subplot(3,1,1)
+h1 = animatedline('Color','b','lineWidth',1.5);
+ax1 = gca;
+ax1.YGrid = 'on';
+ylabel('Resistance');
+
+% LCR 2 Plot
+subplot(3,1,2)
+h2 = animatedline('Color','g','lineWidth',1.5); 
+ax2 = gca;
+ax2.YGrid = 'on';
+subplot(3,1,3)
+h3 = animatedline('Color','g','lineWidth',1.5); 
+ax3 = gca;
+ax3.YGrid = 'on';
+
 
 
 
@@ -68,7 +88,7 @@ for i = 1:timeStepEnd
     % Get current time
     for count=1:3
        fprintf(dev_mult,'%d/n' ,count);
-       pause(0.02)
+       pause(0.01)
         data = query(obj1, ':FETCh:IMPedance:FORMatted?');
         
         splt = strsplit(data,',');
@@ -77,9 +97,29 @@ for i = 1:timeStepEnd
         out(i,2,count) = str2double(splt(2)); % LCR 2
     end
  
-    t(i,1) = toc;
-    a=t(i,1);
+   t(i,1) = datetime('now');
+     figure(1) 
     
+    % LCR1 Graph
+    subplot(3,1,1)
+    addpoints(h1,datenum(t(i,1)),out(i,1,1));
+    ax1.XLim = datenum([t(i,1) - seconds(15) t(i,1)]);
+    datetick('x','keeplimits');
+    drawnow update
+    
+  
+    subplot(3,1,2)
+    addpoints(h2,datenum(t(i,1)),out(i,1,2));
+    ax2.XLim = datenum([t(i,1) - seconds(15) t(i,1)]);
+    datetick('x','keeplimits');
+    drawnow update
+
+    
+     subplot(3,1,3)
+    addpoints(h3,datenum(t(i,1)),out(i,1,3));
+    ax3.XLim = datenum([t(i,1) - seconds(15) t(i,1)]);
+    datetick('x','keeplimits');
+    drawnow update
 end
 
 fprintf(dev,'%i',2)

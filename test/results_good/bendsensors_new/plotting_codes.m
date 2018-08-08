@@ -29,6 +29,13 @@ plot(pos_pred(3,:))
 hold on
 plot(pos_ref(3,:))
 
+
+beg=50;
+fin=650;
+plot3(beg:fin,pos_ref(3,beg:fin),pos_ref(2,beg:fin))
+hold on
+plot3(beg:fin,pos_pred(3,beg:fin),pos_pred(2,beg:fin))
+
 % subplot(4,1,4)
 % plot(err)
 

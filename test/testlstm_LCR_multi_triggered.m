@@ -146,7 +146,7 @@ for i = 1:timeStepEnd
 %             pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
 %             pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
 %         end
-%        plot(squeeze(pos(3,1:i,2))-squeeze(pos(3,1:i,1)),'r','LineWidth',2) % *position COULD be off slightly because it's not being interpolated upon.
+        plot(squeeze(pos(3,1:i,2))-squeeze(pos(3,1:i,1)),'r','LineWidth',2) % *position COULD be off slightly because it's not being interpolated upon.
         %
         if mod(i,300)==0
          clf
