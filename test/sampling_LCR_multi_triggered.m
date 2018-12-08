@@ -2,8 +2,8 @@
 %% LCR Meter Reader
 clear; clc
 rng(78484574)
-addpath('C:\Users\thoma\Desktop\LCR\NatNetSDK\Samples\Matlab')
-timeStepEnd = 15000;
+addpath('C:\Users\benjs\Google Drive\BS -- Projects\PROJ.mlsensor\Code\NatNetSDK\Samples\Matlab')
+timeStepEnd = 15000*3;
 % Find a VISA-USB object.
 obj1 = instrfind('Type', 'visa-usb', 'RsrcName', 'USB0::0x0957::0x0909::MY54202935::0::INSTR', 'Tag', '');
 
@@ -38,8 +38,8 @@ natnetclient = natnet;
 % connect the client to the server (multicast over local loopback) -
 % modify for your network
 fprintf( 'Connecting to the server\n' )
-natnetclient.HostIP = '169.254.35.191';
-natnetclient.ClientIP = '169.254.35.191';
+natnetclient.HostIP = '169.254.168.172'; % 169.254.35.191
+natnetclient.ClientIP = '169.254.168.172'; % 169.254.35.191
 natnetclient.ConnectionType = 'Multicast';
 natnetclient.connect;
 if ( natnetclient.IsConnected == 0 )
@@ -50,13 +50,13 @@ end
 %% Main Data Collection - connecting to the multiplexer for the Arduino and VCS.
 
 % Multiplexer.
-dev_mult = serial('COM4','BaudRate',115200);
+dev_mult = serial('COM5','BaudRate',115200);
 
 fopen(dev_mult)
 pause(1)
 
 % VCS (pneumatic controller).
-dev = serial('COM3','BaudRate',115200);
+dev = serial('COM10','BaudRate',115200);
 fopen(dev)
 pause(1)
 
@@ -88,9 +88,9 @@ for i = 1:timeStepEnd
         if 1 == count
             data_opti = natnetclient.getFrame;
             for j = 1:2
-                pos(1,i,j)=data_opti.UnlabeledMarker(j).x*1000 ;
-                pos(2,i,j)=data_opti.UnlabeledMarker(j).y*1000 ;
-                pos(3,i,j)=data_opti.UnlabeledMarker(j).z*1000 ;
+                pos(1,i,j)=data_opti.LabeledMarker(j).x*1000 ; % used to be unlabeled marker.
+                pos(2,i,j)=data_opti.LabeledMarker(j).y*1000 ;
+                pos(3,i,j)=data_opti.LabeledMarker(j).z*1000 ;
             end
         end
         data = query(obj1, ':FETCh:IMPedance:FORMatted?');
