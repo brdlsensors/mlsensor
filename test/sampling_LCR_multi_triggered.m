@@ -1,9 +1,9 @@
 
 %% LCR Meter Reader
 clear; clc
-rng(78484574)
+rng(71234865)
 addpath('C:\Users\benjs\Google Drive\BS -- Projects\PROJ.mlsensor\Code\NatNetSDK\Samples\Matlab')
-timeStepEnd = 15000*3;
+timeStepEnd = 15000;
 % Find a VISA-USB object.
 obj1 = instrfind('Type', 'visa-usb', 'RsrcName', 'USB0::0x0957::0x0909::MY54202935::0::INSTR', 'Tag', '');
 
@@ -61,7 +61,8 @@ fopen(dev)
 pause(1)
 
 % Send random values for the actuation to the controller.
-inp2=35*rand(1,1000); % pick 1000 random values between 0 to 3.5 bars
+maxP = 35*2; % max pressure in bars. originally 35
+inp2=maxP*rand(1,1000); % pick 1000 random values between 0 to $maxP/10$ bars.
 % (this range includes the scaling performed in the Arduino code, which is
 % sent this way because it's easier to send the data as an integer).
 inp2=round(inp2);
@@ -84,7 +85,7 @@ for i = 1:timeStepEnd
     % Get current time
     for count=1:3
         fprintf(dev_mult,'%d/n' ,count);
-        pause(0.01)
+        pause(0.01) % possibly increase this if the sensor data seems to be sampling from the wrong physical sensor.
         if 1 == count
             data_opti = natnetclient.getFrame;
             for j = 1:2

@@ -214,7 +214,7 @@ void loop() {
       else{
         
         setpt2[ini-numPoints] = float(Serial.parseInt());
-        setpt2[ini-numPoints]=setpt2[ini-numPoints]/10;
+        setpt2[ini-numPoints]=setpt2[ini-numPoints]/10; // x make chamber 2 twice as high P
         Serial.println(ini);
         
       }
