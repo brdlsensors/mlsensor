@@ -1,8 +1,8 @@
 
 sfreq=2; % downsampling frequency.
 lag=100;% cut off the beginning part.
-siz=length(outp)/1-lag-100; % size of posp (position matrix)..
-rx=[1:6]; % which RX pairs of the LCR to use.
+siz=length(outp)/4-lag-100; % size of posp (position matrix)..
+rx=[1:6]; % which RX (both resistance and reactance) pairs of the LCR to use.
 
 
 % Downsampling the actual frequency by sfreq.
@@ -10,13 +10,14 @@ rx=[1:6]; % which RX pairs of the LCR to use.
 % (sfreq) = 10 Hz.
 inpf=inp(1:sfreq:end);
 outpf=outp(1:sfreq:end,:);
-pospf=posp(:,1:sfreq:end,:); 
+pospf=posp(:,1:sfreq:end,:); % position of the markers, or the force values.
 siz=siz/sfreq;
 
 %outpf(:,2:3)=rand(47200,2);
 offset=0;
-% combining pressure values (inpf) and sensor values (outpf).
-x=[inpf(3+lag+offset:siz+2+offset,1),outpf(3+lag+offset:siz+2+offset,rx)]';
+% combining pressure values (inpf) and sensor values (6 total: 3 for
+% resistance, 3 for reactance) (outpf).
+x=[inpf(3+lag+offset:siz+2+offset,1),outpf(3+lag+offset:siz+2+offset,rx)]'; % bsnote: lag/offset/3/2/offset should all just be 'lag', expected dimensions: 7 x number of samples.
 %x=[inpf(3+lag:siz+2,1),outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 %x=[outpf(3+lag:siz+2,rx),outpf(2+lag:siz+1,rx)]';
 %x=[outpf(3+lag:siz+2,rx)]';
@@ -32,7 +33,7 @@ x=[inpf(3+lag+offset:siz+2+offset,1),outpf(3+lag+offset:siz+2+offset,rx)]';
 %t=rssq(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1)));
 % subtracting second marker from the first in order to determine the
 % relative positioning.
-t=[(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1))) ];
+t=[(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1))) ]; % difference between the two markers (relative positioning), expected dimensions: 3 x number of samples. 
 %t=[(squeeze(pospf(:,3+lag:siz+2,2))-squeeze(pospf(:,3+lag:siz+2,1))) ;outpf(3+lag:siz+2,7)' ];
 %t=[inpf(2+lag:siz+1,1)]';
 

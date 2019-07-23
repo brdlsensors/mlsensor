@@ -50,7 +50,7 @@ end
 %% Main Data Collection - connecting to the multiplexer for the Arduino and VCS.
 
 % Multiplexer.
-dev_mult = serial('COM5','BaudRate',115200);
+dev_mult = serial('COM13','BaudRate',115200);
 
 fopen(dev_mult)
 pause(1)
@@ -76,6 +76,7 @@ clear i
 fprintf(dev,'%i',1) % Start the controller.
 % [Possibly a synchronization issue here with simultaneous trigger - maybe the reason for small delay]
 
+%%
 
 
 % Read the resulting multiplexed data from the LCR.
@@ -154,7 +155,7 @@ pos=double(pos);
           pos(:,i,1)=pl_hold;
      end
  end
-for i=1:6 % 6 total RX pairs of the LCR.
+for i=1:6 % 6 total RX pairs (both resistance and reactance) of the LCR.
     [outp(:,i),yt]=resample(out(:,i),t(:,1),freq,'spline'); % interpolate the outp signal. 'spline' has some vibration at the start/beginning of signal.
 end
 for i=1:2 % 2 markers.
